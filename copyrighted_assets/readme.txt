@@ -1,0 +1,1 @@
+This is where I place test assets, that may be copyrighted.

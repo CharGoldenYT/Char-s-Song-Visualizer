@@ -1,2 +1,3 @@
 export/*
-assets/*/coprighted # So I don't accidentally commit stupid shit.
+copyrighted_assets/*
+!copyrighted_assets/readme.txt
