@@ -222,6 +222,30 @@ class SongPlayerSubstate extends BaseSubState
 
 		timeTxt.text = '${FlxStringUtil.formatTime(curSong.time / 1000)} : ${FlxStringUtil.formatTime(curSong.length / 1000)}';
 
+		if (controls.LEFT_P)
+		{
+			if (curSong.time - 10000 > 0)
+			{
+				curSong.pause();
+				curSong.time -= 10000;
+				curSong.play();
+			}
+			else
+			{
+				curSong.pause();
+				curSong.time = 0;
+				curSong.play();
+			}
+		}
+		if (controls.RIGHT_P)
+		{
+			if (curSong.time + 10000 < curSong.length)
+			{
+				curSong.pause();
+				curSong.time += 10000;
+				curSong.play();
+			}
+		}
 		if (controls.BACK)
 		{
 			close();
