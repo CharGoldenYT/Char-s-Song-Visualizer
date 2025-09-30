@@ -1,3 +1,29 @@
 # Char's Song Visualizer
 
-lalallalalal
+## A .ogg player that let's you add custom visuals behind a track (NOT YET IMPLEMENTED)
+
+# How to add custom assets (CURRENTLY ONLY AT BUILD TIME)
+
+## Custom Songs
+
+To make a custom song, simply drop an ogg file of the song into assets/songs, and a metadata file into assets/data/:
+
+`example-song.json`
+```json
+{
+    "name": "Example Song",
+    "artists": [
+        "Example Artist"
+    ],
+    "album": "Example Album",
+    "path": "path-from-songs-folder"
+}
+```
+
+## Custom Playlists
+
+Custom playlists are not implemented at this time.
+
+## Custom Visuals
+
+Visualizers are not implemented at this time.
