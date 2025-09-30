@@ -14,7 +14,8 @@ class Controls
         "TAB_LEFT" => [Q, ONE],
         "TAB_RIGHT" => [E, THREE],
         "CONFIRM" => [ENTER, SPACE],
-        "BACK" => [ESCAPE, BACKSPACE]
+		"BACK" => [ESCAPE, BACKSPACE],
+		"RELOAD" => [R]
     ];
 
     public var LEFT_P(get, null):Bool;
@@ -25,6 +26,7 @@ class Controls
     public var TAB_RIGHT(get, null):Bool;
     public var CONFIRM(get, null):Bool;
     public var BACK(get, null):Bool;
+	public var RELOAD(get, null):Bool;
 
     public var LEFT(get, null):Bool;
     public var RIGHT(get, null):Bool;
@@ -44,6 +46,8 @@ class Controls
     function get_TAB_RIGHT():Bool return justPressed("TAB_RIGHT");
     function get_CONFIRM():Bool return justPressed("CONFIRM");
     function get_BACK():Bool return justPressed("BACK");
+	function get_RELOAD():Bool
+		return justPressed("RELOAD");
 
     function get_LEFT():Bool return pressed("LEFT");
     function get_RIGHT():Bool return pressed("RIGHT");

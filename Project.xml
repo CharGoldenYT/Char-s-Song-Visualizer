@@ -42,6 +42,7 @@
         <assets path="copyrighted_assets" rename="assets" exclude="readme.txt"/>
     <!-- Visualizer Buildtime Settings -->
         <!--<define name="ORIGINAL_TRACESTYLE" />--> <!-- If this is set, doesn't use the custom traces setup in sys.logger.Logs-->
+        <define name="ALLOW_CACHING" />
     <!-- Libraries -->
         <haxelib name="flixel" />
         <haxelib name="flixel-ui" />

@@ -89,6 +89,7 @@ class SongData
     public static function resetCache()
     {
         reset_loadedData();
+		songCache = [];
         dataArray = [];
     }
 }

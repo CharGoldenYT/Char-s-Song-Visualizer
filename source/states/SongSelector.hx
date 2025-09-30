@@ -106,6 +106,10 @@ class SongSelector extends BaseState
 		{
 			changeSelection(-1);
 		}
+		if (controls.RELOAD)
+		{
+			FlxG.resetState();
+		}
 	}
 
 	function goToSongPlayer()
@@ -119,7 +123,7 @@ class SongSelector extends BaseState
 
 	function refreshSongList()
 	{
-		#if !ALLOW_CACHING
+		#if ALLOW_CACHING
 		SongData.resetCache();
 		#end
 

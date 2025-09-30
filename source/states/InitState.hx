@@ -1,5 +1,7 @@
 package states;
 
+import backend.SongData;
+import backend.SongData.Repr_SongData;
 import openfl.Lib;
 
 class InitState extends BaseState
@@ -16,6 +18,14 @@ class InitState extends BaseState
 
         #if !ALLOW_CACHING
         trace("No song metadata to load!");
+		#else
+		refreshSongList();
+
+		for (song in SongData.dataArray)
+		{
+			var s:FlxSound = new FlxSound().loadEmbedded(Paths.song(song.path));
+		}
+		trace(SongData.songCache);
         #end
         
         trace("Finished loading song metadata");
@@ -30,6 +40,26 @@ class InitState extends BaseState
 
         FlxG.autoPause = false; // This is so you can leave it in the background!
     }
+
+	function refreshSongList()
+	{
+		for (file in Paths.listMetadataFiles())
+		{
+			var reprFile = Paths.songMetadataFolder() + file;
+			if (file.endsWith(Paths.metadataExtension))
+			{
+				SongData.loadSongMetadataFromFile(reprFile);
+			}
+			else if (file.endsWith(Paths.multiME))
+			{
+				SongData.loadMultiMetadata(reprFile);
+			}
+			else
+			{
+				trace('File `$reprFile` is not a valid metadata filetype! please use either `${Paths.metadataExtension}` or `${Paths.multiME}`!', WARNING);
+			}
+		}
+	}
 
     public override function update(elapsed:Float) {
         super.update(elapsed);
