@@ -1,0 +1,13 @@
+{
+	"search.exclude": {
+		"export/**/*.*": true
+	},
+	"[haxe]": {
+		"editor.formatOnSave": true,
+		"editor.formatOnSaveMode":"modifications",
+		"editor.formatOnPaste": false,
+		"editor.codeActionsOnSave": {
+		}
+	},
+	"haxe.enableExtendedIndentation": true
+}
