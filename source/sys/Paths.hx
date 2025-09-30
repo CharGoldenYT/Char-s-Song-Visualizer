@@ -1,5 +1,6 @@
 package sys;
 
+import backend.SongData;
 import openfl.utils.Future;
 import openfl.Assets;
 import openfl.media.Sound;
@@ -45,11 +46,20 @@ class Paths
 
     public static function song(key:String):Sound
     {
-		return Sound.fromFile('./assets/songs/$key.ogg');
+		var path:String = 'assets/songs/$key.ogg';
+		if (!SongData.songCache.exists(path))
+			SongData.songCache.set(path, Sound.fromFile('./assets/songs/$key.ogg'));
+
+		return SongData.songCache.get(path);
 	}
 
+	static var cachedSounds:Map<String, Sound> = [];
     public static function sound(key:String):Sound
     {
-		return Sound.fromFile('./assets/sounds/$key.ogg');
+		var path:String = 'assets/sounds/$key.ogg';
+		if (!cachedSounds.exists(path))
+			cachedSounds.set(path, Sound.fromFile('./assets/sounds/$key.ogg'));
+
+		return cachedSounds.get(path);
     }
 }

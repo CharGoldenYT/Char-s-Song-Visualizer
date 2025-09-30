@@ -29,6 +29,7 @@ class SongData
     };
 
     public static var dataArray:Array<Repr_SongData> = [];
+	public static var songCache:Map<String, Sound> = [];
 
     public static function loadSongMetadataFromFile(path:String):Repr_SongData
     {
