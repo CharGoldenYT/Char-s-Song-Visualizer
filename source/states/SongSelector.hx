@@ -7,7 +7,7 @@ import backend.SongData.Repr_SongData;
 
 class SongSelector extends BaseState 
 {
-	var bg:FlxSprite;
+	public var bg:FlxSprite;
 	public var songList(get, null):Array<Repr_SongData>;
 	function get_songList():Array<Repr_SongData> return SongData.dataArray;
 
@@ -113,6 +113,7 @@ class SongSelector extends BaseState
 		// Rn it just plays the song.
 		var curMetadata = songList[curSelected];
 		SongData.loadedData = curMetadata;
+		bg.alpha = 0;
 		openSubState(new SongPlayerSubstate());
 	}
 
@@ -208,6 +209,7 @@ class SongPlayerSubstate extends BaseSubState
 
 	public override function close() {
 		curSong.stop();
+		SongSelector.instance.bg.alpha = 1;
 		super.close();
 	}
 

@@ -1,5 +1,6 @@
 package sys;
 
+import openfl.utils.Future;
 import openfl.Assets;
 import openfl.media.Sound;
 
@@ -44,11 +45,11 @@ class Paths
 
     public static function song(key:String):Sound
     {
-        return Assets.getSound('assets/songs/$key.ogg');
-    }
+		return Sound.fromFile('./assets/songs/$key.ogg');
+	}
 
     public static function sound(key:String):Sound
     {
-        return Assets.getSound('assets/sounds/$key.ogg');
+		return Sound.fromFile('./assets/sounds/$key.ogg');
     }
 }

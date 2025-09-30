@@ -2,7 +2,7 @@
 
 ## A .ogg player that let's you add custom visuals behind a track (NOT YET IMPLEMENTED)
 
-# How to add custom assets (CURRENTLY ONLY AT BUILD TIME)
+# How to add custom assets
 
 ## Custom Songs
 
