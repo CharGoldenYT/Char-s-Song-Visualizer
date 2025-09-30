@@ -46,8 +46,8 @@
         <haxelib name="flixel" />
         <haxelib name="flixel-ui" />
         <haxelib name="flixel-addons" />
-        <haxelib name="hxvlc" /> <!-- For using videos -->
-        <haxelib name="polymod" />
+        <!-- <haxelib name="hxvlc" />
+        <haxelib name="polymod" /> -->
     <!-- Polymod Config -->
     <!-- Haxedefines -->
 
