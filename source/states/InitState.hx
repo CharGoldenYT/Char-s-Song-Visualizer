@@ -42,24 +42,7 @@ class InitState extends BaseState
     }
 
 	function refreshSongList()
-	{
-		for (file in Paths.listMetadataFiles())
-		{
-			var reprFile = Paths.songMetadataFolder() + file;
-			if (file.endsWith(Paths.metadataExtension))
-			{
-				SongData.loadSongMetadataFromFile(reprFile);
-			}
-			else if (file.endsWith(Paths.multiME))
-			{
-				SongData.loadMultiMetadata(reprFile);
-			}
-			else
-			{
-				trace('File `$reprFile` is not a valid metadata filetype! please use either `${Paths.metadataExtension}` or `${Paths.multiME}`!', WARNING);
-			}
-		}
-	}
+		SongSelector.refreshSongList();
 
     public override function update(elapsed:Float) {
         super.update(elapsed);

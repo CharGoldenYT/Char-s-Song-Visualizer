@@ -10,6 +10,7 @@ class Paths
     // do NOT make these the same or shit WILL break!
     public static final metadataExtension:String = 'json';
     public static final multiME:String = "mmdf"; // Multi Metadata Format's extension (Json based)
+	public static final playlistExt:String = "pl"; // Extension for playlists (Json based)
 
     public static function songMetadataFolder():String return "assets/data/songMetadata/";
     public static function songMetadata(key:String):String
@@ -21,8 +22,7 @@ class Paths
         }
 
         return songMetadataFolder() + '$key.$metadataExtension';
-    }
-
+	}
     public static function multiSongData(key:String):String
     {
         if (!FileSystem.exists(songMetadataFolder() + '$key.$multiME'))
@@ -33,11 +33,24 @@ class Paths
 
         return songMetadataFolder() + '$key.$multiME';
     }
+	public static function listMetadataFiles():Array<String>
+		return FileSystem.readDirectory(songMetadataFolder());
 
-    public static function listMetadataFiles():Array<String>
+	public static function songPlaylistFolder():String
+		return 'assets/data/playlists/';
+
+	public static function playlistFile(key:String):String
     {
-        return FileSystem.readDirectory(songMetadataFolder());
-    }
+		if (!FileSystem.exists(songPlaylistFolder() + '$key.$playlistExt'))
+		{
+			trace('Shit `${songPlaylistFolder() + '$key.$playlistExt'}` does not exist!', ERROR);
+			return null;
+		}
+		return songPlaylistFolder() + '$key.$playlistExt';
+	}
+
+	public static function listPlaylistFiles():Array<String>
+		return FileSystem.readDirectory(songPlaylistFolder());
 
     public static function image(key:String):String
     {

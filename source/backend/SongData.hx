@@ -12,7 +12,15 @@ typedef Repr_SongData = {
     var album:String;
     @:optional var path:String; // todo: auto find file
     @:optional var bpm:Null<Int>;
-    @:optional var ExtraMetadata:Array<Dynamic>; // For extra behaviour that is modded in
+	@:optional var extraMetadata:Array<Dynamic>; // For extra behaviour that is modded in
+}
+
+typedef Repr_Playlist =
+{
+	var mmdf:MultiSongData;
+	var listName:String;
+	var listCreator:String;
+	@:optional var extraMetadata:Array<Dynamic>;
 }
 
 typedef MultiSongData = {
@@ -28,8 +36,15 @@ class SongData
         path: null
     };
 
+	public static var loadedPlaylist:Repr_Playlist = {
+		mmdf: null,
+		listName: "No Playlist",
+		listCreator: "None"
+	};
+
     public static var dataArray:Array<Repr_SongData> = [];
 	public static var songCache:Map<String, Sound> = [];
+	public static var listArray:Array<Repr_Playlist> = [];
 
     public static function loadSongMetadataFromFile(path:String):Repr_SongData
     {
@@ -41,26 +56,46 @@ class SongData
         if (data.path == null)
         {
             var splitPath:Array<String> = path.split("/");
-            splitPath = splitPath[splitPath.length - 1].split(".");
-
-            data.path = splitPath[0] + '.mp3';
+			data.path = splitPath[splitPath.length - 1].split('.')[0];
         }
         dataArray.pushUnique(data);
 
         return data;
     }
 
-    public static function loadSong():FlxSound
+	public static function loadSong(?loop:Bool = false):FlxSound
     {
-        trace('assets/songs/${loadedData.path}');
-        var curSong:FlxSound = new FlxSound().loadEmbedded(Paths.song(loadedData.path));
+		// trace('assets/songs/${loadedData.path}');
+		var curSong:FlxSound = new FlxSound().loadEmbedded(Paths.song(loadedData.path), loop);
 
         return curSong;
     }
 
+	public static function loadPlaylist(path:String):Repr_Playlist
+	{
+		if (!FileSystem.exists(path))
+			return defaultList();
+
+		var file = File.getContent(path);
+		var list:Repr_Playlist = cast Parser.parse(file);
+		listArray.pushUnique(list);
+
+		return list;
+	}
+
     public static function reset_loadedData()
     {
-        loadedData = defaultData();
+		loadedData = {
+			name: "No Song Loaded",
+			artists: ["None"],
+			album: "None",
+			path: null
+		};
+		loadedPlaylist = {
+			mmdf: null,
+			listName: "No Playlist",
+			listCreator: "None"
+		};
     }
 
     public static function defaultData():Repr_SongData
@@ -72,6 +107,15 @@ class SongData
             path: null
         };
     }
+
+	public static function defaultList():Repr_Playlist
+	{
+		return {
+			mmdf: null,
+			listName: "No Playlist",
+			listCreator: "None"
+		};
+	}
 
     public static function loadMultiMetadata(path:String):Array<Repr_SongData>
     {

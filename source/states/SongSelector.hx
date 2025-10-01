@@ -1,28 +1,32 @@
 package states;
 
-import flixel.util.FlxStringUtil;
-import openfl.Assets;
 import backend.SongData;
 import backend.SongData.Repr_SongData;
+import substates.SongPlayerSubstate;
 
 class SongSelector extends BaseState 
 {
 	public var bg:FlxSprite;
 	public var songList(get, null):Array<Repr_SongData>;
 	function get_songList():Array<Repr_SongData> return SongData.dataArray;
+	public var playlist_list(get, null):Array<Repr_Playlist>;
 
+	function get_playlist_list():Array<Repr_Playlist>
+		return SongData.listArray;
+
+	public var tabs:Array<String> = ["SONGS", "PLAYLISTS"];
 	public var grpSongs:FlxTypedGroup<FlxText>; // to be given a specific SongBacker class.
 	public var curSelected:Int = 0;
+	public var curTab:Int = 0;
 	var camFollow:FlxObject;
 	var camBG:FlxCamera;
 	var camMenu:FlxCamera;
 	public var camMusic:FlxCamera;
 	public static var instance:SongSelector;
+	public var catText:FlxText;
 
 	public override function create() {
 		super.create();
-
-		trace(Paths.listMetadataFiles());
 
 		refreshSongList();
 
@@ -46,6 +50,11 @@ class SongSelector extends BaseState
 		add(bg);
 		bg.screenCenter();
 
+		catText = new FlxText(0, 10, FlxG.width, "(Q) < SONGS > (E)", 40);
+		catText.setFormat(null, 40, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
+		catText.borderSize = 5;
+		add(catText);
+
 		grpSongs = new FlxTypedGroup<FlxText>();
 		add(grpSongs);
 		grpSongs.cameras = [camMenu];
@@ -55,7 +64,7 @@ class SongSelector extends BaseState
 		{
 			pos++;
 			var s:String = '${song.name}\n${song.album}';
-			var text:FlxText = new FlxText(0, 50 * pos, 0, s, 20);
+			var text:FlxText = new FlxText(0, 60 * pos, 0, s, 20);
 			text.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
 			grpSongs.add(text);
 		}
@@ -68,11 +77,22 @@ class SongSelector extends BaseState
 	{
 		FlxG.sound.play(Paths.sound("scrollMenu"));
 
-		curSelected += change;
-		if (curSelected > songList.length -1)
-			curSelected = 0;
-		if (curSelected < 0)
-			curSelected = songList.length -1;
+		if (tabs[curTab] == "SONGS")
+		{
+			curSelected += change;
+			if (curSelected > songList.length - 1)
+				curSelected = 0;
+			if (curSelected < 0)
+				curSelected = songList.length - 1;
+		}
+		else if (tabs[curTab] == "PLAYLISTS")
+		{
+			curSelected += change;
+			if (curSelected > playlist_list.length - 1)
+				curSelected = 0;
+			if (curSelected < 0)
+				curSelected = playlist_list.length - 1;
+		}
 
 		for (i in 0...songList.length)
 		{
@@ -96,7 +116,7 @@ class SongSelector extends BaseState
 
 		if (controls.CONFIRM)
 		{
-			goToSongPlayer();
+			goToSongPlayer(FlxG.keys.pressed.SHIFT);
 		}
 		if (controls.DOWN_P)
 		{
@@ -106,26 +126,80 @@ class SongSelector extends BaseState
 		{
 			changeSelection(-1);
 		}
+		if (controls.TAB_LEFT)
+		{
+			changeTabs(-1);
+		}
+		if (controls.TAB_RIGHT)
+		{
+			changeTabs(1);
+		}
 		if (controls.RELOAD)
 		{
 			FlxG.resetState();
 		}
 	}
 
-	function goToSongPlayer()
+	function goToSongPlayer(?loop:Bool = false)
 	{
 		// Rn it just plays the song.
 		var curMetadata = songList[curSelected];
 		SongData.loadedData = curMetadata;
 		bg.alpha = 0;
-		openSubState(new SongPlayerSubstate());
+		catText.alpha = 0;
+		openSubState(new SongPlayerSubstate(loop));
 	}
 
-	function refreshSongList()
+	function changeTabs(change:Int = 0)
 	{
-		#if ALLOW_CACHING
+		FlxG.sound.play(Paths.sound("scrollMenu"));
+
+		curTab += change;
+		if (curTab > tabs.length - 1)
+			curTab = 0;
+		if (curTab < 0)
+			curTab = tabs.length - 1;
+
+		curSelected = 0;
+		refreshSongList();
+
+		grpSongs.destroy();
+		grpSongs = new FlxTypedGroup<FlxText>();
+		add(grpSongs);
+
+		catText.text = '(Q) < ${tabs[curTab]} > (E)';
+
+		switch (tabs[curTab])
+		{
+			case "SONGS":
+				var pos:Int = -1;
+				for (song in songList)
+				{
+					pos++;
+					var s:String = '${song.name}\n${song.album}';
+					var text:FlxText = new FlxText(0, 60 * pos, 0, s, 20);
+					text.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
+					grpSongs.add(text);
+				}
+
+			case "PLAYLISTS":
+				var pos:Int = -1;
+				for (list in playlist_list)
+				{
+					pos++;
+					var s:String = '${list.listName}\nby ${list.listCreator}';
+					var text:FlxText = new FlxText(0, 60 * pos, 0, s, 20);
+					text.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
+					grpSongs.add(text);
+				}
+		}
+
+		changeSelection();
+	}
+
+	public static function refreshSongList()
+	{
 		SongData.resetCache();
-		#end
 
 		for (file in Paths.listMetadataFiles())
 		{
@@ -140,115 +214,16 @@ class SongSelector extends BaseState
 			}
 			else
 			{
-				trace('File `$reprFile` is not a valid metadata filetype! please use either `${Paths.metadataExtension}` or `${Paths.multiME}`!', WARNING);
+				trace('File `$reprFile` is not a valid metadata filetype, please use either `${Paths.metadataExtension}` or `${Paths.multiME}`!', WARNING);
 			}
 		}
-	}
-}
-
-class SongPlayerSubstate extends BaseSubState
-{
-	var playerBG:FlxSprite;
-	var timeTxt:FlxText;
-	var curSong:FlxSound;
-	var songText:FlxText;
-
-	public override function create() {
-		super.create();
-		if (!Main.appletMode)
+		for (file in Paths.listPlaylistFiles())
 		{
-			var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
-			bg.alpha = 0.5;
-			add(bg);
-		}
-
-		this.cameras = [SongSelector.instance.camMusic];
-
-		curSong = SongData.loadSong();
-		FlxG.sound.list.add(curSong);
-
-		var bw:Int = 300;
-		var bh:Int = 150;
-
-		if (!Main.appletMode)
-		{
-			bw = 600; bh = 300;
-		}
-		playerBG = new FlxSprite().makeGraphic(bw, bh, 0xFFCC66DD);
-		add(playerBG);
-		playerBG.y = FlxG.height - playerBG.height;
-
-		curSong.play();
-		curSong.onComplete = ()->close();
-
-		var songText:FlxText = new FlxText(0, 0, 0, "", 20);
-		songText.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
-		songText.y = playerBG.y + ((playerBG.height * 0.5) - songText.height) - 30;
-		add(songText);
-		var song = SongSelector.instance.songList[SongSelector.instance.curSelected];
-		songText.text = '${song.name}\n${song.album}\n${formatArtists(song.artists)}';
-
-		timeTxt = new FlxText(0, 0, 0, "0:00 / " + FlxStringUtil.formatTime(curSong.length / 1000), 20);
-		timeTxt.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
-		timeTxt.y = songText.y + 75;
-		add(timeTxt);
-	}
-
-	function formatArtists(a:Array<String>):String
-	{
-		var s:String = "";
-		for (artist in a)
-		{
-			s += artist + " | ";
-		}
-
-		var split = s.split("");
-		s = "";
-		for (i in 0...split.length-2)
-		{
-			s += split[i];
-		}
-		return s;
-	}
-
-	public override function close() {
-		curSong.stop();
-		SongSelector.instance.bg.alpha = 1;
-		super.close();
-	}
-
-	public override function update(elapsed:Float) {
-		super.update(elapsed);
-
-		timeTxt.text = '${FlxStringUtil.formatTime(curSong.time / 1000)} : ${FlxStringUtil.formatTime(curSong.length / 1000)}';
-
-		if (controls.LEFT_P)
-		{
-			if (curSong.time - 10000 > 0)
-			{
-				curSong.pause();
-				curSong.time -= 10000;
-				curSong.play();
-			}
+			var reprFile = Paths.songPlaylistFolder() + file;
+			if (file.endsWith(Paths.playlistExt))
+				SongData.loadPlaylist(reprFile);
 			else
-			{
-				curSong.pause();
-				curSong.time = 0;
-				curSong.play();
-			}
-		}
-		if (controls.RIGHT_P)
-		{
-			if (curSong.time + 10000 < curSong.length)
-			{
-				curSong.pause();
-				curSong.time += 10000;
-				curSong.play();
-			}
-		}
-		if (controls.BACK)
-		{
-			close();
+				trace('File `$reprFile` is not a valid playlist filetype, please use ${Paths.playlistExt}!', ERROR);
 		}
 	}
 }
