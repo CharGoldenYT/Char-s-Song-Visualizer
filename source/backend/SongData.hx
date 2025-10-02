@@ -135,5 +135,6 @@ class SongData
         reset_loadedData();
 		songCache = [];
         dataArray = [];
+		listArray = [];
     }
 }

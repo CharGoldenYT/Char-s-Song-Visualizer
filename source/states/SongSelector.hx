@@ -152,6 +152,7 @@ class SongSelector extends BaseState
 
 	function changeTabs(change:Int = 0)
 	{
+		return; // function broken.
 		FlxG.sound.play(Paths.sound("scrollMenu"));
 
 		curTab += change;
@@ -161,11 +162,13 @@ class SongSelector extends BaseState
 			curTab = tabs.length - 1;
 
 		curSelected = 0;
+		for (text in grpSongs.members)
+		{
+			grpSongs.remove(text, true);
+			text.destroy();
+		}
+		
 		refreshSongList();
-
-		grpSongs.destroy();
-		grpSongs = new FlxTypedGroup<FlxText>();
-		add(grpSongs);
 
 		catText.text = '(Q) < ${tabs[curTab]} > (E)';
 
