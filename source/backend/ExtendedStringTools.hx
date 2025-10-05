@@ -12,11 +12,16 @@ class ExtendedStringTools
     {
         if (s == null)
         {
-            Logs.trace("String is null!");
+			tracen("String is null!", ERROR);
             return null;
         }
         if (s.toLowerCase() == "true") return true;
         else if (s.toLowerCase() == "false") return false;
         else return null;
     }
+	public static function parseInt(s:String):Int
+		return Std.parseInt(s);
+
+	public static function parseFloat(s:String):Float
+		return Std.parseFloat(s);
 }

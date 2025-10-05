@@ -39,6 +39,7 @@ class InitState extends BaseState
         Lib.application.window.height = Main.app.height;
 
         FlxG.autoPause = false; // This is so you can leave it in the background!
+		DiscordClient.initialize();
     }
 
 	function refreshSongList()

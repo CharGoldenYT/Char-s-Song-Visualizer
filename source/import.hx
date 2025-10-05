@@ -5,9 +5,10 @@ import backend.BaseSubState;
 import backend.Constants;
 import sys.LuaIterator;
 import sys.logger.Logs;
-import sys.logger.Logs.traceNew as trace;
+import sys.logger.Logs.traceNew as tracen;
 import sys.logger.Level;
 import sys.Paths;
+import backend.Discord;
 
 // Flixel
 import flixel.FlxSprite;
@@ -28,6 +29,9 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 
+// Using imports
 using StringTools;
 using backend.ArrayTools;
+using backend.ExtendedStringTools;
+using backend.CoolUtil;
 #end

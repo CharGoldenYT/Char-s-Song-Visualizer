@@ -26,6 +26,7 @@ class Main extends Sprite
 	{
 		super();
 		args = Sys.args().lowercased();
+		trace(args);
 		initShit();
 		addChild(curGame = new FlxGame(app.width, app.height, app.initialState, app.fps, app.fps, app.skipSplash, app.startFullscreen));
 	}

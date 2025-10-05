@@ -9,6 +9,7 @@ class SongPlayerSubstate extends BaseSubState
 	var playerBG:FlxSprite;
 	var timeTxt:FlxText;
 	var curSong:FlxSound;
+	var song:Repr_SongData;
 	var songText:FlxText;
     var isLooped:Bool = false;
 	var isPaused(get, null):Bool;
@@ -55,8 +56,10 @@ class SongPlayerSubstate extends BaseSubState
 		songText.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
 		songText.y = playerBG.y + ((playerBG.height * 0.5) - songText.height) - 30;
 		add(songText);
-		var song = SongSelector.instance.songList[SongSelector.instance.curSelected];
+		song = SongSelector.instance.songList[SongSelector.instance.curSelected];
 		songText.text = '${song.name}\n${song.album}\n${formatArtists(song.artists)}';
+
+		DiscordClient.changePresence('${song.name} | ${song.album} | ${formatArtists(song.artists)}');
 
 		timeTxt = new FlxText(0, 0, 0, "0:00 / " + FlxStringUtil.formatTime(curSong.length / 1000), 20);
 		timeTxt.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
@@ -85,13 +88,17 @@ class SongPlayerSubstate extends BaseSubState
 		curSong.stop();
 		SongSelector.instance.bg.alpha = 1;
 		SongSelector.instance.catText.alpha = 1;
+		DiscordClient.changePresence();
 		super.close();
 	}
 
     public function re_init()
     {
         curSong.stop();
+		close();
+		SongSelector.instance.openSubState(new SongPlayerSubstate(isLooped));
     }
+
 
 	public override function update(elapsed:Float) {
 		super.update(elapsed);

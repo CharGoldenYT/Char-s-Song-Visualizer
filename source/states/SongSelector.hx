@@ -1,5 +1,6 @@
 package states;
 
+import flixel.util.typeLimit.OneOfTwo;
 import backend.SongData;
 import backend.SongData.Repr_SongData;
 import substates.SongPlayerSubstate;
@@ -13,6 +14,15 @@ class SongSelector extends BaseState
 
 	function get_playlist_list():Array<Repr_Playlist>
 		return SongData.listArray;
+
+	var curList(get, null):Array<Dynamic>;
+
+	function get_curList():Array<Dynamic>
+	{
+		var l:Dynamic = [songList, playlist_list];
+
+		return l[curTab];
+	}
 
 	public var tabs:Array<String> = ["SONGS", "PLAYLISTS"];
 	public var grpSongs:FlxTypedGroup<FlxText>; // to be given a specific SongBacker class.
@@ -71,28 +81,18 @@ class SongSelector extends BaseState
 
 		changeSelection();
 		instance = this;
+		DiscordClient.changePresence();
 	}
 
 	function changeSelection(change:Int = 0)
 	{
 		FlxG.sound.play(Paths.sound("scrollMenu"));
 
-		if (tabs[curTab] == "SONGS")
-		{
-			curSelected += change;
-			if (curSelected > songList.length - 1)
-				curSelected = 0;
-			if (curSelected < 0)
-				curSelected = songList.length - 1;
-		}
-		else if (tabs[curTab] == "PLAYLISTS")
-		{
-			curSelected += change;
-			if (curSelected > playlist_list.length - 1)
-				curSelected = 0;
-			if (curSelected < 0)
-				curSelected = playlist_list.length - 1;
-		}
+		curSelected += change;
+		if (curSelected > curList.length - 1)
+			curSelected = 0;
+		if (curSelected < 0)
+			curSelected = curList.length - 1;
 
 		for (i in 0...songList.length)
 		{
@@ -142,6 +142,8 @@ class SongSelector extends BaseState
 
 	function goToSongPlayer(?loop:Bool = false)
 	{
+		if (tabs[curTab] == "PLAYLISTS")
+			return; // add functionality later
 		// Rn it just plays the song.
 		var curMetadata = songList[curSelected];
 		SongData.loadedData = curMetadata;
@@ -152,7 +154,7 @@ class SongSelector extends BaseState
 
 	function changeTabs(change:Int = 0)
 	{
-		return; // function broken.
+		// return; // function broken.
 		FlxG.sound.play(Paths.sound("scrollMenu"));
 
 		curTab += change;
@@ -168,33 +170,28 @@ class SongSelector extends BaseState
 			text.destroy();
 		}
 		
-		refreshSongList();
+		// refreshSongList();
 
 		catText.text = '(Q) < ${tabs[curTab]} > (E)';
 
-		switch (tabs[curTab])
+		for (i in 0...curList.length)
 		{
-			case "SONGS":
-				var pos:Int = -1;
-				for (song in songList)
-				{
-					pos++;
-					var s:String = '${song.name}\n${song.album}';
-					var text:FlxText = new FlxText(0, 60 * pos, 0, s, 20);
-					text.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
-					grpSongs.add(text);
-				}
-
-			case "PLAYLISTS":
-				var pos:Int = -1;
-				for (list in playlist_list)
-				{
-					pos++;
-					var s:String = '${list.listName}\nby ${list.listCreator}';
-					var text:FlxText = new FlxText(0, 60 * pos, 0, s, 20);
-					text.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
-					grpSongs.add(text);
-				}
+			var s:String = '';
+			var isPlaylist = (curList[0].listName != null);
+			var isSonglist = (curList[0].name != null);
+			if (isPlaylist)
+			{
+				var fList:Array<Repr_Playlist> = cast curList;
+				s = '${fList[i].listName}\n${fList[i].listCreator}';
+			}
+			else if (isSonglist)
+			{
+				var fList:Array<Repr_SongData> = cast curList;
+				s = '${fList[i].name}\n${fList[i].album}';
+			}
+			var text:FlxText = new FlxText(0, 60 * i, 0, s, 20);
+			text.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
+			grpSongs.add(text);
 		}
 
 		changeSelection();
@@ -217,7 +214,7 @@ class SongSelector extends BaseState
 			}
 			else
 			{
-				trace('File `$reprFile` is not a valid metadata filetype, please use either `${Paths.metadataExtension}` or `${Paths.multiME}`!', WARNING);
+				tracen('File `$reprFile` is not a valid metadata filetype, please use either `${Paths.metadataExtension}` or `${Paths.multiME}`!', WARNING);
 			}
 		}
 		for (file in Paths.listPlaylistFiles())
@@ -226,7 +223,7 @@ class SongSelector extends BaseState
 			if (file.endsWith(Paths.playlistExt))
 				SongData.loadPlaylist(reprFile);
 			else
-				trace('File `$reprFile` is not a valid playlist filetype, please use ${Paths.playlistExt}!', ERROR);
+				tracen('File `$reprFile` is not a valid playlist filetype, please use ${Paths.playlistExt}!', ERROR);
 		}
 	}
 }

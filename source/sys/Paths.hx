@@ -17,7 +17,7 @@ class Paths
     {
         if (!FileSystem.exists(songMetadataFolder() + '$key.$metadataExtension'))
         {
-            trace('Shit `${songMetadataFolder() + '$key.$metadataExtension'}` does not exist!', ERROR);
+			tracen('Shit `${songMetadataFolder() + '$key.$metadataExtension'}` does not exist!', ERROR);
             return null;
         }
 
@@ -27,7 +27,7 @@ class Paths
     {
         if (!FileSystem.exists(songMetadataFolder() + '$key.$multiME'))
         {
-            trace('Shit `${songMetadataFolder() + '$key.$multiME'}` does not exist!', ERROR);
+			tracen('Shit `${songMetadataFolder() + '$key.$multiME'}` does not exist!', ERROR);
             return null;
         }
 
@@ -43,7 +43,7 @@ class Paths
     {
 		if (!FileSystem.exists(songPlaylistFolder() + '$key.$playlistExt'))
 		{
-			trace('Shit `${songPlaylistFolder() + '$key.$playlistExt'}` does not exist!', ERROR);
+			tracen('Shit `${songPlaylistFolder() + '$key.$playlistExt'}` does not exist!', ERROR);
 			return null;
 		}
 		return songPlaylistFolder() + '$key.$playlistExt';
