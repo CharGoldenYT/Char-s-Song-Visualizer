@@ -96,16 +96,14 @@ class SongSelector extends BaseState
 
 		for (i in 0...songList.length)
 		{
+			var member:FlxText = grpSongs.members[i];
 			if (i == curSelected)
 			{
-				var member:FlxText = grpSongs.members[i];
-
 				member.alpha = 1;
 				camFollow.y = member.y;
 			}
 			else
 			{
-				var member:FlxText = grpSongs.members[i];
 				member.alpha = 0.5;
 			}
 		}
