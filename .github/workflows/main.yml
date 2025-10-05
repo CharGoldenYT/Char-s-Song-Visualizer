@@ -1,0 +1,111 @@
+# MAINLY shout out to Moxie, JS Engine and Psych Engine workflows!
+# Workflows fixed by a Former Dev, Daveberry Blueson!
+
+name: Compiling the engine
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      addHaxedefines:
+        description: 'Additional Haxedefines'
+        required: true
+        default: '-DTEST_BUILD'
+        type: textarea
+
+jobs:
+  Linux-Build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.1.7
+
+      - uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.4
+      - name: Install Haxelib
+        run: |
+          sudo apt-get install libvlc-dev
+          sudo apt-get install libvlccore-dev
+          haxelib setup ~/haxelib
+          chmod +x ./setup/unix.sh
+          sh ./setup/unix.sh
+          haxelib list
+      - name: Compile Linux
+        run: haxelib run lime build Project.xml linux
+      - name: Publish Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Universe-Linux
+          path: 'export/release/linux/bin'
+  Windows-Build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4.1.7
+
+      - uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.4
+      
+      - name: Install Haxelib
+        run: |
+          haxelib setup C:/haxelib
+          .\"setup/windows-libraries.bat"
+          haxelib list
+        shell: cmd
+      - name: Compile Windows
+        run: haxelib run lime build windows
+      - name: Publish Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CSV-Windows
+          path: export/release/windows/bin
+  MacOS-INTEL-Build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4.1.7
+
+      - uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.4
+      - name: Install Haxelibs
+        run: |
+          haxelib setup ~/haxelib
+          chmod +x ./setup/unix.sh
+          sh ./setup/unix.sh
+          haxelib list
+      - name: Compile MacOS ARM
+        run: haxelib run lime build mac -64
+      - name: Publish Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CSV-Mac-Intel
+          path: export/release/macos/bin
+      
+  MacOS-ARM-Build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4.1.7
+
+      - uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.4
+      - name: Install Haxelib
+        run: |
+          haxelib setup ~/haxelib
+          chmod +x ./setup/unix.sh
+          sh ./setup/unix.sh
+          haxelib list
+      - name: Compile MacOS ARM
+        run: haxelib run lime build mac -arm64
+      - name: Publish Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CSV-Mac-ARN
+          path: export/release/macos/bin
