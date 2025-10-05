@@ -162,13 +162,9 @@ class SongSelector extends BaseState
 			curTab = tabs.length - 1;
 
 		curSelected = 0;
-		for (text in grpSongs.members)
-		{
-			grpSongs.remove(text, true);
-			text.destroy();
-		}
+		grpSongs.forEachAlive(function(member:FlxText) member.destroy());
 		
-		// refreshSongList();
+		refreshSongList();
 
 		catText.text = '(Q) < ${tabs[curTab]} > (E)';
 
