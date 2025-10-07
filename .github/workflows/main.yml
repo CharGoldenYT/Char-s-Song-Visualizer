@@ -1,7 +1,7 @@
 # MAINLY shout out to Moxie, JS Engine and Psych Engine workflows!
 # Workflows fixed by a Former Dev, Daveberry Blueson!
 
-name: Compiling the engine
+name: Compiling App
 
 on:
   push:
@@ -16,7 +16,32 @@ on:
         default: '-DTEST_BUILD'
         type: textarea
 
+      overrideVersion:
+        description: "Custom Version"
+        required: false
+        type: textarea
+
 jobs:
+
+  Get-VersionInfo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.1.7
+      - name: getVersion
+        run: |
+            echo "ver=$(cat gitVersion.txt)" >> $GITHUB_ENV
+
+            echo "ver = $ver"
+
+      
+
+  Define-Env:
+    runs-on: ubuntu-latest
+
+    env: 
+      defs: ${{ inputs.addHaxedefines }} -DWORKFLOW_BUILD -DVERSION-OVERRIDE="${{ github.env.ver }}"
+
   Linux-Build:
     runs-on: ubuntu-latest
 
@@ -39,7 +64,7 @@ jobs:
       - name: Publish Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Universe-Linux
+          name: CSV-Linux
           path: 'export/release/linux/bin'
   Windows-Build:
     runs-on: windows-latest
