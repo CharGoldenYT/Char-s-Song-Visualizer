@@ -39,6 +39,11 @@ jobs:
   Define-Env:
     runs-on: ubuntu-latest
 
+    steps:
+      - uses: actions/checkout@v4.1.7
+      - name: kill
+        run: echo defineEnv
+
     env: 
       defs: ${{ inputs.addHaxedefines }} -DWORKFLOW_BUILD -DVERSION-OVERRIDE="${{ github.env.ver }}"
 
