@@ -76,6 +76,7 @@ class SongSelector extends BaseState
 			var s:String = '${song.name}\n${song.album}';
 			var text:FlxText = new FlxText(0, 60 * pos, 0, s, 20);
 			text.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
+			text.ID = pos;
 			grpSongs.add(text);
 		}
 
@@ -94,19 +95,28 @@ class SongSelector extends BaseState
 		if (curSelected < 0)
 			curSelected = curList.length - 1;
 
-		for (i in 0...songList.length)
-		{
-			var member:FlxText = grpSongs.members[i];
-			if (i == curSelected)
-			{
+		grpSongs.forEach(function(member:FlxText){
+			if (member.ID == curSelected){
 				member.alpha = 1;
 				camFollow.y = member.y;
-			}
-			else
-			{
+			}else{
 				member.alpha = 0.5;
 			}
-		}
+		});
+
+		// for (i in 0...songList.length)
+		// {
+		// 	var member:FlxText = grpSongs.members[i];
+		// 	if (i == curSelected)
+		// 	{
+		// 		member.alpha = 1;
+		// 		camFollow.y = member.y;
+		// 	}
+		// 	else
+		// 	{
+		// 		member.alpha = 0.5;
+		// 	}
+		// }
 	}
 
 	public override function update(elapsed:Float) {
@@ -185,6 +195,7 @@ class SongSelector extends BaseState
 			}
 			var text:FlxText = new FlxText(0, 60 * i, 0, s, 20);
 			text.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
+			text.ID = i;
 			grpSongs.add(text);
 		}
 
