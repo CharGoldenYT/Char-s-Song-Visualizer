@@ -1,18 +1,21 @@
 package substates;
 
+import backend.SongHandler;
+import visualizers.BaseVisualizer;
 import flixel.util.FlxStringUtil;
 import states.SongSelector;
 import backend.SongData;
 
 class SongPlayerSubstate extends BaseSubState
 {
-	var playerBG:FlxSprite;
-	var timeTxt:FlxText;
-	var curSong:FlxSound;
+	var curSong(get, null):FlxSound;
+
+	function get_curSong():FlxSound
+		return SongHandler.curSong;
 	var song:Repr_SongData;
-	var songText:FlxText;
     var isLooped:Bool = false;
 	var isPaused(get, null):Bool;
+	var curVisualizer:BaseVisualizer;
 	function get_isPaused():Bool
 	{
 		return !(curSong.playing ?? true);
@@ -26,6 +29,12 @@ class SongPlayerSubstate extends BaseSubState
 
 	public override function create() {
 		super.create();
+		if (Paths.song(SongData.loadedData.path) == null)
+		{
+			close();
+			SongSelector.instance.openSubState(new CoolErrorSubstate("That path is not a supported file type on desktop, or points to a file that does not exist!",
+				"Error playing song!", null, 3, false));
+		}
 		if (!Main.appletMode)
 		{
 			var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
@@ -33,55 +42,29 @@ class SongPlayerSubstate extends BaseSubState
 			add(bg);
 		}
 
+		SongHandler.initialize(isLooped);
+
 		this.cameras = [SongSelector.instance.camMusic];
 
-		curSong = SongData.loadSong(isLooped);
-		FlxG.sound.list.add(curSong);
-
-		var bw:Int = 300;
-		var bh:Int = 150;
-
-		if (!Main.appletMode)
-		{
-			bw = 600; bh = 300;
-		}
-		playerBG = new FlxSprite().makeGraphic(bw, bh, 0xFFCC66DD);
-		add(playerBG);
-		playerBG.y = FlxG.height - playerBG.height;
+		/* curVisualizer = getVisualizer(SongData.loadedData.path);
+			add(curVisualizer);
+			curVisualizer.create(); */
 
 		curSong.play();
 		if (!isLooped) curSong.onComplete = ()->close();
 
-		var songText:FlxText = new FlxText(0, 0, 0, "", 20);
-		songText.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
-		songText.y = playerBG.y + ((playerBG.height * 0.5) - songText.height) - 30;
-		add(songText);
-		song = SongSelector.instance.songList[SongSelector.instance.curSelected];
-		songText.text = '${song.name}\n${song.album}\n${formatArtists(song.artists)}';
+		DiscordClient.changePresence('${song.name} | ${song.album} | ${ArrayTools.formatArtists(song.artists)}');
 
-		DiscordClient.changePresence('${song.name} | ${song.album} | ${formatArtists(song.artists)}');
-
-		timeTxt = new FlxText(0, 0, 0, "0:00 / " + FlxStringUtil.formatTime(curSong.length / 1000), 20);
-		timeTxt.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
-		timeTxt.y = songText.y + 75;
-		add(timeTxt);
+		curVisualizer.createPost();
 	}
 
-	function formatArtists(a:Array<String>):String
+	function getVisualizer(id:String):BaseVisualizer
 	{
-		var s:String = "";
-		for (artist in a)
+		switch (id)
 		{
-			s += artist + " | ";
+			default:
+				return new visualizers.RecordVisualizer("Record Visualizer", SongData.loadedData, SongData.loadedPlaylist);
 		}
-
-		var split = s.split("");
-		s = "";
-		for (i in 0...split.length-2)
-		{
-			s += split[i];
-		}
-		return s;
 	}
 
 	public override function close() {
@@ -89,6 +72,7 @@ class SongPlayerSubstate extends BaseSubState
 		SongSelector.instance.bg.alpha = 1;
 		SongSelector.instance.catText.alpha = 1;
 		DiscordClient.changePresence();
+		curVisualizer.close();
 		super.close();
 	}
 
@@ -103,7 +87,7 @@ class SongPlayerSubstate extends BaseSubState
 	public override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		timeTxt.text = '${FlxStringUtil.formatTime(curSong.time / 1000)} : ${FlxStringUtil.formatTime(curSong.length / 1000)}';
+		curVisualizer.update(elapsed);
 
 		if (controls.LEFT_P)
 		{
@@ -121,6 +105,7 @@ class SongPlayerSubstate extends BaseSubState
 		{
 			close();
 		}
+		curVisualizer.updatePost(elapsed);
 	}
 
 	public function pause()

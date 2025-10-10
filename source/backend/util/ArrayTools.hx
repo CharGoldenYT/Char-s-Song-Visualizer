@@ -1,6 +1,6 @@
-package backend;
+package backend.util;
 
-using backend.ArrayTools;
+using backend.util.ArrayTools;
 
 class ArrayTools {
     public static function itemsContain(a:Array<String>, s:String):Bool
@@ -55,4 +55,21 @@ class ArrayTools {
         a = newArray;
         return newArray;
     }
+
+	public static function formatArtists(a:Array<String>):String
+	{
+		var s:String = "";
+		for (artist in a)
+		{
+			s += artist + " | ";
+		}
+
+		var split = s.split("");
+		s = "";
+		for (i in 0...split.length-2)
+		{
+			s += split[i];
+		}
+		return s;
+	}
 }

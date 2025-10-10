@@ -1,7 +1,7 @@
 package;
 
+import openfl.events.UncaughtErrorEvent;
 import Sys;
-import backend.Controls;
 import flixel.FlxGame;
 import openfl.display.Sprite;
 import states.InitState as TitleState;
@@ -29,6 +29,7 @@ class Main extends Sprite
 		trace(args);
 		initShit();
 		addChild(curGame = new FlxGame(app.width, app.height, app.initialState, app.fps, app.fps, app.skipSplash, app.startFullscreen));
+		openfl.Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 	}
 
 	static function initShit()
@@ -58,4 +59,6 @@ class Main extends Sprite
 		#end
 		new Controls();
 	}
+	function onCrash(e:UncaughtErrorEvent):Void
+		tracen(e.error);
 }

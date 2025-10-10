@@ -1,4 +1,4 @@
-package backend;
+package sys;
 
 import flixel.input.keyboard.FlxKey;
 import flixel.util.FlxSave;
@@ -22,6 +22,7 @@ class Controls
     public var RIGHT_P(get, null):Bool;
     public var UP_P(get, null):Bool;
     public var DOWN_P(get, null):Bool;
+
     public var TAB_LEFT(get, null):Bool;
     public var TAB_RIGHT(get, null):Bool;
     public var CONFIRM(get, null):Bool;
@@ -37,6 +38,25 @@ class Controls
     public var RIGHT_R(get, null):Bool;
     public var UP_R(get, null):Bool;
     public var DOWN_R(get, null):Bool;
+
+	public var anyKeyPressed(get, null):Bool;
+
+	function get_anyKeyPressed():Bool
+	{
+		var k:Array<Bool> = [LEFT, RIGHT, UP, DOWN, TAB_LEFT, TAB_RIGHT, CONFIRM, BACK, RELOAD];
+
+		var anyStruck:Bool = false;
+
+		for (key in k)
+		{
+			if (key)
+			{
+				anyStruck = key;
+			}
+		}
+
+		return anyStruck;
+	}
 
     function get_LEFT_P():Bool return justPressed("LEFT");
     function get_RIGHT_P():Bool return justPressed("RIGHT");

@@ -1,14 +1,24 @@
 #if !macro
-// Backend shit
-import backend.BaseState;
-import backend.BaseSubState;
-import backend.Constants;
+// Project shit
+//
+// backend
+import states.BaseState;
+import substates.BaseSubState;
+import backend.util.Constants;
+import backend.Discord;
+//
+// sys
 import sys.LuaIterator;
 import sys.logger.Logs;
 import sys.logger.Logs.traceNew as tracen;
 import sys.logger.Level;
 import sys.Paths;
-import backend.Discord;
+import sys.CoolErrorSubstate;
+import sys.Controls;
+#if desktop
+import sys.FileSystem;
+import sys.io.File;
+#end
 
 // Flixel
 import flixel.FlxSprite;
@@ -28,10 +38,11 @@ import flixel.group.FlxGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
+import flixel.math.FlxPoint;
 
 // Using imports
 using StringTools;
-using backend.ArrayTools;
-using backend.ExtendedStringTools;
-using backend.CoolUtil;
+using backend.util.ArrayTools;
+using backend.util.ExtendedStringTools;
+using backend.util.CoolUtil;
 #end

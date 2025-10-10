@@ -1,5 +1,6 @@
 package sys;
 
+import backend.SongHandler;
 import backend.SongData;
 import openfl.utils.Future;
 import openfl.Assets;
@@ -57,9 +58,10 @@ class Paths
         return 'assets/images/$key.png';
     }
 
-    public static function song(key:String):Sound
+	public static function song(key:String):Null<Sound>
     {
-		var path:String = 'assets/songs/$key.ogg';
+		var path:String = 'assets/songs/$key';
+
 		if (!SongData.songCache.exists(path))
 			SongData.songCache.set(path, Sound.fromFile('./assets/songs/$key.ogg'));
 
@@ -75,4 +77,7 @@ class Paths
 
 		return cachedSounds.get(path);
     }
+	@:deprecated("Currently a dummy function!")
+	public static function font(key:String):Null<String>
+		return null;
 }

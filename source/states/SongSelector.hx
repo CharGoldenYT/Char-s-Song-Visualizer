@@ -1,5 +1,8 @@
 package states;
 
+import visualizers.RecordVisualizer;
+import visualizers.BaseVisualizer;
+import backend.SongHandler;
 import flixel.util.typeLimit.OneOfTwo;
 import backend.SongData;
 import backend.SongData.Repr_SongData;
@@ -99,11 +102,14 @@ class SongSelector extends BaseState
 			if (member.ID == curSelected){
 				member.alpha = 1;
 				camFollow.y = member.y;
-			}else{
+			}
+			else
+			{
 				member.alpha = 0.5;
 			}
 		});
 
+		// Old code that was broken
 		// for (i in 0...songList.length)
 		// {
 		// 	var member:FlxText = grpSongs.members[i];
