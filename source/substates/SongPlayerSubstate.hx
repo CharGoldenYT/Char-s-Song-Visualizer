@@ -4,15 +4,20 @@ import flixel.util.FlxStringUtil;
 import states.SongSelector;
 import backend.SongData;
 
+import flixel.ui.FlxBar;
+
 class SongPlayerSubstate extends BaseSubState
 {
 	var playerBG:FlxSprite;
 	var timeTxt:FlxText;
+	var timeBar:FlxBar;
 	var curSong:FlxSound;
 	var song:Repr_SongData;
 	var songText:FlxText;
     var isLooped:Bool = false;
 	var isPaused(get, null):Bool;
+	var songPercent:Float;
+
 	function get_isPaused():Bool
 	{
 		return !(curSong.playing ?? true);
@@ -64,6 +69,13 @@ class SongPlayerSubstate extends BaseSubState
 		timeTxt = new FlxText(0, 0, 0, "0:00 / " + FlxStringUtil.formatTime(curSong.length / 1000), 20);
 		timeTxt.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
 		timeTxt.y = songText.y + 75;
+
+		timeBar = new FlxBar(timeTxt.x + 10, timeTxt.y+75, LEFT_TO_RIGHT, bw-20, 10, this, 'songPercent', 0, 1);
+		timeBar.scrollFactor.set();
+		timeBar.createFilledBar(0xFF000000, 0xFFFFFFFF);
+		timeBar.numDivisions = 800;
+		add(timeBar);
+
 		add(timeTxt);
 	}
 
@@ -104,6 +116,7 @@ class SongPlayerSubstate extends BaseSubState
 		super.update(elapsed);
 
 		timeTxt.text = '${FlxStringUtil.formatTime(curSong.time / 1000)} : ${FlxStringUtil.formatTime(curSong.length / 1000)}';
+		songPercent = curSong.time / curSong.length;
 
 		if (controls.LEFT_P)
 		{
