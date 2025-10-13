@@ -6,7 +6,7 @@
 
 ## Custom Songs
 
-To make a custom song, simply drop an ogg file of the song into assets/songs, and a metadata file into assets/data/:
+To make a custom song, simply drop an ogg file of the song, and a metadata file into externSongs:
 
 `example-song.json`
 ```json
