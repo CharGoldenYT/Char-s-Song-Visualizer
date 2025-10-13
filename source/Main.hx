@@ -1,5 +1,6 @@
 package;
 
+import sys.FileSystem;
 import Sys;
 import backend.Controls;
 import flixel.FlxGame;
@@ -57,5 +58,9 @@ class Main extends Sprite
 		Logs.init();
 		#end
 		new Controls();
+		if (!FileSystem.exists("externSongs/"))
+		{
+			FileSystem.createDirectory("externSongs/");
+		}
 	}
 }

@@ -52,10 +52,10 @@ class DiscordClient
 	static function onReady()
 	{
 		DiscordRpc.presence({
-			details: "In the Intro",
+			details: "Still Initializing!",
 			state: null,
 			largeImageKey: 'icon',
-			largeImageText: "Universe Engine"
+			largeImageText: "Char's Song Visualizer"
 		});
 	}
 

@@ -208,7 +208,8 @@ class SongSelector extends BaseState
 
 		for (file in Paths.listMetadataFiles())
 		{
-			var reprFile = Paths.songMetadataFolder() + file;
+			var reprFile = Paths.getPath(file, "data/songMetadata/", false);
+			trace(reprFile);
 			if (file.endsWith(Paths.metadataExtension))
 			{
 				SongData.loadSongMetadataFromFile(reprFile);

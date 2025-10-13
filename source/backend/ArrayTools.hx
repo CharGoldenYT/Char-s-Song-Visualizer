@@ -24,7 +24,7 @@ class ArrayTools {
         return null;
     }
 
-    /*
+	/**
     * Takes an array of Strings and makes them all lowercase. pretty simple.
     */
     public static function lowercased(a:Array<String>):Array<String>
@@ -39,6 +39,9 @@ class ArrayTools {
         return lArray;
     }
 
+	/**
+	 * Pushes an item ONLY if it is not already present.
+	 */
     public static function pushUnique<T>(a:Array<T>, o:T):Int
     {
         if (!a.contains(o)) return a.push(o); else return a.length;

@@ -66,17 +66,24 @@ class SongPlayerSubstate extends BaseSubState
 
 		DiscordClient.changePresence('${song.name} | ${song.album} | ${formatArtists(song.artists)}');
 
-		timeTxt = new FlxText(0, 0, 0, "0:00 / " + FlxStringUtil.formatTime(curSong.length / 1000), 20);
+		timeTxt = new FlxText(35, 0, 0, "0:00 / " + FlxStringUtil.formatTime(curSong.length / 1000), 20);
 		timeTxt.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
-		timeTxt.y = songText.y + 75;
+		timeTxt.y = songText.y + 100;
 
-		timeBar = new FlxBar(timeTxt.x + 10, timeTxt.y+75, LEFT_TO_RIGHT, bw-20, 10, this, 'songPercent', 0, 1);
+		timeBar = new FlxBar(timeTxt.x - 25, timeTxt.y + 50, LEFT_TO_RIGHT, bw - 20, 10, this, 'songPercent', 0, 1);
 		timeBar.scrollFactor.set();
 		timeBar.createFilledBar(0xFF000000, 0xFFFFFFFF);
 		timeBar.numDivisions = 800;
 		add(timeBar);
 
 		add(timeTxt);
+		if (isLooped)
+		{
+			var loopSymbol:FlxSprite = new FlxSprite().loadGraphic(Paths.image("looped"));
+			loopSymbol.y = songText.y + 75;
+			loopSymbol.x = (timeTxt.x + timeTxt.width) + 10;
+			add(loopSymbol);
+		}
 	}
 
 	function formatArtists(a:Array<String>):String

@@ -1,40 +1,83 @@
 package sys;
 
 import backend.SongData;
-import openfl.utils.Future;
-import openfl.Assets;
 import openfl.media.Sound;
 
 class Paths
 {
     // do NOT make these the same or shit WILL break!
     public static final metadataExtension:String = 'json';
-    public static final multiME:String = "mmdf"; // Multi Metadata Format's extension (Json based)
-	public static final playlistExt:String = "pl"; // Extension for playlists (Json based)
+	/**
+	 * Multi Metadata Format's extension (Json based)
+	 */
+	public static final multiME:String = "mmdf";
 
-    public static function songMetadataFolder():String return "assets/data/songMetadata/";
+	/**
+	 * Extension for playlists (Json based)
+	 */
+	public static final playlistExt:String = "pl";
+
+	public static function exists(path:String):Bool
+	{
+		return FileSystem.exists(path);
+	}
+
+	/**
+	 * Gets whether a file is in externSongs or is in assets. NOTE: `externSongs` takes priority
+	 * @param key File
+	 * @param fPrefix Folder's Prefix (In assets)
+	 * @param pfixfextsongs Allow externSongs to also have the prefix.
+	 * @return String
+	 */
+	public static function getPath(key:String, fPrefix:String = "", pfixfextsongs:Bool = true):String
+	{
+		var pFix:String = pfixfextsongs ? fPrefix : '';
+		var path1 = "./externSongs/" + pFix + key;
+		var path2 = "assets/" + fPrefix + key;
+		if (exists(path1))
+			return path1;
+		else
+			return path2;
+	}
+
     public static function songMetadata(key:String):String
     {
-        if (!FileSystem.exists(songMetadataFolder() + '$key.$metadataExtension'))
+		var path:String = getPath('$key.$metadataExtension');
+		if (exists(path))
         {
-			tracen('Shit `${songMetadataFolder() + '$key.$metadataExtension'}` does not exist!', ERROR);
-            return null;
-        }
+			return path;
+		}
 
-        return songMetadataFolder() + '$key.$metadataExtension';
+		tracen('`$key.$metadataExtension does not exist in songMetadata!', ERROR);
+		return null;
 	}
+
     public static function multiSongData(key:String):String
     {
-        if (!FileSystem.exists(songMetadataFolder() + '$key.$multiME'))
+		var path:String = getPath('$key.$multiME', "data/songMetadata/", false);
+		if (exists(path))
         {
-			tracen('Shit `${songMetadataFolder() + '$key.$multiME'}` does not exist!', ERROR);
-            return null;
-        }
+			return path;
+		}
 
-        return songMetadataFolder() + '$key.$multiME';
-    }
+		tracen('`$key.$multiME does not exist in songMetadata!', ERROR);
+		return null;
+	}
 	public static function listMetadataFiles():Array<String>
-		return FileSystem.readDirectory(songMetadataFolder());
+	{
+		var list:Array<String> = [];
+
+		for (file in FileSystem.readDirectory("assets/data/songMetadata"))
+			list.pushUnique(file);
+
+		for (file in FileSystem.readDirectory('externSongs/'))
+		{
+			if (file.endsWith(multiME) || file.endsWith(metadataExtension))
+				list.pushUnique(file);
+		}
+
+		return list;
+	}
 
 	public static function songPlaylistFolder():String
 		return 'assets/data/playlists/';
@@ -59,9 +102,9 @@ class Paths
 
     public static function song(key:String):Sound
     {
-		var path:String = 'assets/songs/$key.ogg';
+		var path:String = getPath('$key.ogg', 'songs/', false);
 		if (!SongData.songCache.exists(path))
-			SongData.songCache.set(path, Sound.fromFile('./assets/songs/$key.ogg'));
+			SongData.songCache.set(path, Sound.fromFile(path));
 
 		return SongData.songCache.get(path);
 	}
