@@ -3,7 +3,6 @@
 import backend.BaseState;
 import backend.BaseSubState;
 import backend.Constants;
-import sys.LuaIterator;
 import sys.logger.Logs;
 import sys.logger.Logs.traceNew as tracen;
 import sys.logger.Level;
