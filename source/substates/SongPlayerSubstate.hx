@@ -64,7 +64,7 @@ class SongPlayerSubstate extends BaseSubState
 		song = SongSelector.instance.songList[SongSelector.instance.curSelected];
 		songText.text = '${song.name}\n${song.album}\n${formatArtists(song.artists)}';
 
-		DiscordClient.changePresence('${song.name} | ${song.album} | ${formatArtists(song.artists)}');
+		DiscordClient.changePresence('${song.name} | ${song.album} | ${formatArtists(song.artists)} | ${FlxStringUtil.formatTime(curSong.length / 1000)} ${isLooped ? " - Looping" : ""}');
 
 		timeTxt = new FlxText(35, 0, 0, "0:00 / " + FlxStringUtil.formatTime(curSong.length / 1000), 20);
 		timeTxt.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
