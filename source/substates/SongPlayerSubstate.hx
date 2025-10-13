@@ -3,6 +3,7 @@ package substates;
 import flixel.util.FlxStringUtil;
 import states.SongSelector;
 import backend.SongData;
+import flixel.math.FlxMath;
 
 import flixel.ui.FlxBar;
 
@@ -10,13 +11,15 @@ class SongPlayerSubstate extends BaseSubState
 {
 	var playerBG:FlxSprite;
 	var timeTxt:FlxText;
-	var timeBar:FlxBar;
 	var curSong:FlxSound;
 	var song:Repr_SongData;
 	var songText:FlxText;
     var isLooped:Bool = false;
 	var isPaused(get, null):Bool;
 	var songPercent:Float;
+	
+	var timeBar:FlxBar;
+	var timeControl:FlxSprite;
 
 	function get_isPaused():Bool
 	{
@@ -76,14 +79,17 @@ class SongPlayerSubstate extends BaseSubState
 		timeBar.numDivisions = 800;
 		add(timeBar);
 
+		timeControl = new FlxSprite().makeGraphic(10, Std.int(timeBar.height)+10, 0xFFFFFFFF);
+		timeControl.y = timeBar.y-(timeBar.height/2);
+		add(timeControl);
+
 		add(timeTxt);
-		if (isLooped)
-		{
-			var loopSymbol:FlxSprite = new FlxSprite().loadGraphic(Paths.image("looped"));
-			loopSymbol.y = songText.y + 75;
-			loopSymbol.x = (timeTxt.x + timeTxt.width) + 10;
-			add(loopSymbol);
-		}
+
+		var loopSymbol:FlxSprite = new FlxSprite().loadGraphic(Paths.image("looped"));
+		loopSymbol.y = songText.y + 75;
+		loopSymbol.x = (timeTxt.x + timeTxt.width) + 10;
+		add(loopSymbol);
+		loopSymbol.color = isLooped ? 0xFFFFFFFF : 0xFF888888;
 	}
 
 	function formatArtists(a:Array<String>):String
@@ -124,6 +130,18 @@ class SongPlayerSubstate extends BaseSubState
 
 		timeTxt.text = '${FlxStringUtil.formatTime(curSong.time / 1000)} : ${FlxStringUtil.formatTime(curSong.length / 1000)}';
 		songPercent = curSong.time / curSong.length;
+
+		if (FlxG.mouse.overlaps(timeBar)){
+			if (FlxG.mouse.justPressed){
+				skipTime(Std.int(FlxMath.remapToRange(FlxG.mouse.screenX, 0, timeBar.width, 0, curSong.length/1000) - curSong.time/1000));
+			}
+			timeControl.scale.y = timeControl.scale.y + (1.5 - timeControl.scale.y) / 2;
+		}else{
+			timeControl.scale.y = timeControl.scale.y + (1 - timeControl.scale.y) / 2;
+		}
+
+		timeControl.x = timeBar.x
+			+ (timeBar.width * (FlxMath.remapToRange(timeBar.percent, 0, 100, 0, 100 *0.01)));
 
 		if (controls.LEFT_P)
 		{
