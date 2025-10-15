@@ -24,6 +24,24 @@ To make a custom song, simply drop an ogg file of the song, and a metadata file 
 
 Custom playlists are not implemented at this time.
 
-## Custom Visuals
+## Custom Visualizers
 
 Visualizers are not implemented at this time.
+
+# Controls
+
+By default the controls are as follows:
+
+W S Up Down - Change selection
+
+A D Left Right - Skip Back/Forward 10s
+
+Space/Enter - Confirm/Pause
+
+Backspace/Escape - Stop
+
+Shift+Confirm - Loop Song
+
+## Mouse Controls
+
+Currently you can only click on the timebar to change what part of the song you are currently in.
