@@ -32,15 +32,15 @@ Visualizers are not implemented at this time.
 
 By default the controls are as follows:
 
-W S Up Down - Change selection
+`W`/`S` `Up`/`Down` - Change selection
 
-A D Left Right - Skip Back/Forward 10s
+`A`/`D` `Left`/`Right` - Skip Back/Forward 10s
 
-Space/Enter - Confirm/Pause
+`Space`/`Enter` - Confirm/Pause
 
-Backspace/Escape - Stop
+`Backspace`/`Escape` - Stop
 
-Shift+Confirm - Loop Song
+`Shift+Confirm` - Loop Song
 
 ## Mouse Controls
 
