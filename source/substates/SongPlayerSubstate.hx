@@ -40,7 +40,8 @@ class SongPlayerSubstate extends BaseSubState
 	{
 		if (curPlaylist == null)
 		{
-			close(); // fun fact this means it was a singular song that was loaded.
+			if (!isLooped)
+				close(); // fun fact this means it was a singular song that was loaded.
 			return null;
 		}
 		var pl_data:Array<Repr_SongData> = curPlaylist.data.mmdf.data;
@@ -94,7 +95,8 @@ class SongPlayerSubstate extends BaseSubState
 
 		this.cameras = [SongSelector.instance.camMusic];
 
-		curSong = SongData.loadSong();
+		var loopIt:Bool = (isLooped && (curPlaylist == null));
+		curSong = SongData.loadSong(loopIt);
 		FlxG.sound.list.add(curSong);
 
 		var bw:Int = 300;
