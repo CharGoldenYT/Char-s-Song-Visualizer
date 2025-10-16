@@ -1,5 +1,6 @@
 package states;
 
+import sys.Watermark;
 import backend.SongData;
 import backend.SongData.Repr_SongData;
 import openfl.Lib;
@@ -40,6 +41,9 @@ class InitState extends BaseState
 
         FlxG.autoPause = false; // This is so you can leave it in the background!
 		DiscordClient.initialize();
+		Main.verWatermark = new Watermark("Char's Song Visualizers v" + Constants.ver.toString(), 0xFFFFFFFF, 20);
+		Main.verWatermark.alpha = 1;
+		Main.instance.addChild(Main.verWatermark);
     }
 
 	function refreshSongList()

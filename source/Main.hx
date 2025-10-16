@@ -1,5 +1,6 @@
 package;
 
+import sys.Watermark;
 import backend.SettingsHandler;
 import sys.FileSystem;
 import Sys;
@@ -22,6 +23,9 @@ class Main extends Sprite
 
 	public static var args:Array<String>;
 	public static var appletMode:Bool = false; // Not TRUE applet, but moreso a minimized version for streaming with.
+	public static var verWatermark:Watermark;
+
+	public static var instance:Main;
 
 	public static var curGame:FlxGame;
 	public function new()
@@ -33,7 +37,7 @@ class Main extends Sprite
 		addChild(curGame = new FlxGame(app.width, app.height, app.initialState, app.fps, app.fps, app.skipSplash, app.startFullscreen));
 	}
 
-	static function initShit()
+	function initShit()
 	{
 		var lwArg:String = args.get_itemContaining("width");
 		var lhArg:String = args.get_itemContaining("height");
@@ -64,5 +68,6 @@ class Main extends Sprite
 			FileSystem.createDirectory("externSongs/");
 		}
 		SettingsHandler.loadConfig();
+		instance = this;
 	}
 }

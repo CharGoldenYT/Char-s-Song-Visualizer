@@ -18,7 +18,7 @@ class SongPlayerSubstate extends BaseSubState
 {
 	var playerBG:FlxSprite;
 	var timeTxt:FlxText;
-	var curSong:FlxSound;
+	static var curSong:FlxSound;
 	var song:Repr_SongData;
 	var songText:FlxText;
     var isLooped:Bool = false;
@@ -94,7 +94,7 @@ class SongPlayerSubstate extends BaseSubState
 
 		this.cameras = [SongSelector.instance.camMusic];
 
-		curSong = SongData.loadSong(isLooped);
+		curSong = SongData.loadSong();
 		FlxG.sound.list.add(curSong);
 
 		var bw:Int = 300;
@@ -109,16 +109,19 @@ class SongPlayerSubstate extends BaseSubState
 		playerBG.y = FlxG.height - playerBG.height;
 
 		curSong.play();
-		if (!isLooped)
-			curSong.onComplete = () ->
+		curSong.onComplete = () ->
 			{
 				var data = nextSong();
+			if (curPlaylist != null)
+			{
 				if (data != null)
 				{
+					curSong.destroy();
 					SongData.loadedData = data;
-					curSong.loadEmbedded(Paths.song(SongData.loadedData.path));
+					curSong = SongData.loadSong();
 					curSong.play();
 				}
+			}
 			};
 
 		var songText:FlxText = new FlxText(0, 0, 0, "", 20);

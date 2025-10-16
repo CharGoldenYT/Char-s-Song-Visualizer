@@ -118,4 +118,8 @@ class Paths
 
 		return cachedSounds.get(path);
     }
+	public static function font(key:String):String
+	{
+		return 'assets/fonts/$key';
+	}
 }

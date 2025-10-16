@@ -5,14 +5,15 @@ class Repr_SemVer // move over thx.semver /j
 	public var major:Int;
 	public var minor:Int;
 	public var patch:Int;
-	public var identifier:String = null;
+	public var identifier:String = '';
 
 	public function new(major:Int, minor:Int, patch:Int, ?identifier:String = null)
 	{
 		this.major = major;
 		this.minor = minor;
 		this.patch = patch;
-		this.identifier = identifier;
+		if (identifier != null)
+			this.identifier = identifier;
 	}
 
 	public function toString():String
