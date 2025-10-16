@@ -124,7 +124,7 @@ class SongSelector extends BaseState
 
 		if (controls.CONFIRM)
 		{
-			goToSongPlayer(FlxG.keys.pressed.SHIFT);
+			goToSongPlayer(FlxG.keys.pressed.SHIFT, FlxG.keys.pressed.TAB);
 		}
 		if (controls.DOWN_P)
 		{
@@ -148,11 +148,16 @@ class SongSelector extends BaseState
 		}
 	}
 
-	function goToSongPlayer(?loop:Bool = false)
+	function goToSongPlayer(?loop:Bool = false, ?shuffle:Bool = false)
 	{
 		if (tabs[curTab] == "PLAYLISTS")
-			return; // add functionality later
-		// Rn it just plays the song.
+		{
+			SongPlayerSubstate.curPlaylist = {
+				data: playlist_list[curSelected],
+				loop: loop,
+				shuffle: shuffle
+			};
+		}
 		var curMetadata = songList[curSelected];
 		SongData.loadedData = curMetadata;
 		bg.alpha = 0;

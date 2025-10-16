@@ -34,4 +34,5 @@ class Constants
 {
     public static final saveFolder:String = "Char_s-Song-Visualizer";
 	public static final ver:Repr_SemVer = new Repr_SemVer(0, 0, 1);
+	public static final settingFileVersion:Repr_SemVer = new Repr_SemVer(1, 0, 0);
 }

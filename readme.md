@@ -32,6 +32,8 @@ Visualizers are not implemented at this time.
 
 By default the controls are as follows:
 
+`Q`/`E` - Change Tabs
+
 `W`/`S` `Up`/`Down` - Change selection
 
 `A`/`D` `Left`/`Right` - Skip Back/Forward 10s
@@ -40,7 +42,9 @@ By default the controls are as follows:
 
 `Backspace`/`Escape` - Stop
 
-`Shift+Confirm` - Loop Song
+`Shift+Confirm` - Loop Song/Playlist
+
+`Tab+Confirm` - Shuffle Playlist
 
 ## Mouse Controls
 

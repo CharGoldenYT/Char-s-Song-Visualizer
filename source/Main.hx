@@ -1,5 +1,6 @@
 package;
 
+import backend.SettingsHandler;
 import sys.FileSystem;
 import Sys;
 import backend.Controls;
@@ -62,5 +63,6 @@ class Main extends Sprite
 		{
 			FileSystem.createDirectory("externSongs/");
 		}
+		SettingsHandler.loadConfig();
 	}
 }

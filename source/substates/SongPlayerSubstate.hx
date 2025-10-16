@@ -7,6 +7,13 @@ import flixel.math.FlxMath;
 
 import flixel.ui.FlxBar;
 
+typedef Playlist =
+{
+	var data:Repr_Playlist;
+	var shuffle:Bool;
+	var loop:Bool;
+}
+
 class SongPlayerSubstate extends BaseSubState
 {
 	var playerBG:FlxSprite;
@@ -17,6 +24,9 @@ class SongPlayerSubstate extends BaseSubState
     var isLooped:Bool = false;
 	var isPaused(get, null):Bool;
 	var songPercent:Float;
+	public static var curPlaylist:Playlist = null;
+
+	var songIndex:Int = 0;
 	
 	var timeBar:FlxBar;
 	var timeControl:FlxSprite;
@@ -24,6 +34,47 @@ class SongPlayerSubstate extends BaseSubState
 	function get_isPaused():Bool
 	{
 		return !(curSong.playing ?? true);
+	}
+
+	function nextSong():Repr_SongData
+	{
+		if (curPlaylist == null)
+		{
+			close(); // fun fact this means it was a singular song that was loaded.
+			return null;
+		}
+		var pl_data:Array<Repr_SongData> = curPlaylist.data.mmdf.data;
+		var song:Repr_SongData;
+
+		if (curPlaylist.shuffle)
+		{
+			if (!curPlaylist.loop)
+				curPlaylist.data.mmdf.data.splice(pl_data.indexOf(SongData.loadedData), 1);
+			var int = FlxG.random.int(0, pl_data.length - 1);
+			song = pl_data[int];
+			if (song.path == SongData.loadedData.path)
+			{
+				if (int == pl_data.length)
+					song = pl_data[int - 1];
+				else
+					song = pl_data[int + 1];
+			}
+		}
+		else
+		{
+			songIndex++;
+			if (songIndex > pl_data.length - 1)
+			{
+				if (!curPlaylist.loop)
+					close();
+				else
+					songIndex = 0;
+			}
+
+			song = pl_data[songIndex];
+		}
+
+		return song;
 	}
 
     public function new(?loop:Bool = false)
@@ -58,7 +109,17 @@ class SongPlayerSubstate extends BaseSubState
 		playerBG.y = FlxG.height - playerBG.height;
 
 		curSong.play();
-		if (!isLooped) curSong.onComplete = ()->close();
+		if (!isLooped)
+			curSong.onComplete = () ->
+			{
+				var data = nextSong();
+				if (data != null)
+				{
+					SongData.loadedData = data;
+					curSong.loadEmbedded(Paths.song(SongData.loadedData.path));
+					curSong.play();
+				}
+			};
 
 		var songText:FlxText = new FlxText(0, 0, 0, "", 20);
 		songText.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
@@ -114,6 +175,7 @@ class SongPlayerSubstate extends BaseSubState
 		SongSelector.instance.bg.alpha = 1;
 		SongSelector.instance.catText.alpha = 1;
 		DiscordClient.changePresence();
+		curPlaylist = null;
 		super.close();
 	}
 
