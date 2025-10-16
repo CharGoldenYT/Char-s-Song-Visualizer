@@ -122,6 +122,7 @@ class SongPlayerSubstate extends BaseSubState
 					SongData.loadedData = data;
 					curSong = SongData.loadSong();
 					curSong.play();
+					FlxG.sound.list.add(curSong);
 				}
 			}
 			};
