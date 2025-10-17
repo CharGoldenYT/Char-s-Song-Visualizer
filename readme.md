@@ -8,6 +8,9 @@
 
 To make a custom song, simply drop an ogg file of the song, and a metadata file into `externSongs/`:
 
+> [!NOTE]
+> TODO: Make this easier on mac os by looking under `~/Music/CSV_externSongs/`
+
 `example-song.json`
 ```json
 {
@@ -22,7 +25,39 @@ To make a custom song, simply drop an ogg file of the song, and a metadata file 
 
 ## Custom Playlists
 
-Custom playlists are not implemented at this time.
+> [!NOTE]
+> TODO: Make this easier with a `playlists` folder in the root.
+
+To make a new custom playlist you must place a new playlist file in `assets/data/playlists` like so:
+
+`example-list.pl`
+
+```json
+{
+    "mmdf": {
+        "data": [
+            {
+                "name": "Example Song1",
+                "artists": [
+                    "Example Artist"
+                ],
+                "album": "Example Album",
+                "path": "path-from-songs-folder"
+            },
+            {
+                "name": "Example Song2",
+                "artists": [
+                    "Example Artist"
+                ],
+                "album": "Example Album",
+                "path": "path-from-songs-folder"
+            }
+        ]
+    },
+    "listName": "Example List",
+    "listCreator": "Example List Creator"
+}
+```
 
 ## Custom Visualizers
 
