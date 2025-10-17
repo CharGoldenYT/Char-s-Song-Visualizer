@@ -1,8 +1,8 @@
 package states;
 
 import flixel.util.typeLimit.OneOfTwo;
-import backend.SongData;
-import backend.SongData.Repr_SongData;
+import data.SongData;
+import data.SongData.Repr_SongData;
 import substates.SongPlayerSubstate;
 
 class SongSelector extends BaseState 
@@ -32,6 +32,7 @@ class SongSelector extends BaseState
 	var camBG:FlxCamera;
 	var camMenu:FlxCamera;
 	public var camMusic:FlxCamera;
+	public var camViz:FlxCamera;
 	public static var instance:SongSelector;
 	public var catText:FlxText;
 
@@ -45,9 +46,11 @@ class SongSelector extends BaseState
 		camMusic = new FlxCamera();
 		camFollow = new FlxObject();
 		camFollow.screenCenter(X);
+		camViz = new FlxCamera();
 
 		camMenu.bgColor.alpha = 0;
 		camMusic.bgColor.alpha = 0;
+		camViz.bgColor.alpha = 0;
 		camMenu.scroll.y = camFollow.y;
 		camMenu.scroll.x = camFollow.x;
 		camMenu.follow(camFollow, LOCKON, 0.06);
@@ -55,6 +58,7 @@ class SongSelector extends BaseState
 		FlxG.cameras.add(camBG);
 		FlxG.cameras.add(camMenu, false);
 		FlxG.cameras.add(camMusic, false);
+		FlxG.cameras.add(camViz, false);
 
 		bg = new FlxSprite().loadGraphic(Paths.image("SongSelectorBG"));
 		add(bg);

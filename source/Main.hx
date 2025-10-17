@@ -1,10 +1,9 @@
 package;
 
 import sys.Watermark;
-import backend.SettingsHandler;
+import data.SettingsHandler;
 import sys.FileSystem;
 import Sys;
-import backend.Controls;
 import flixel.FlxGame;
 import openfl.display.Sprite;
 import states.InitState as TitleState;

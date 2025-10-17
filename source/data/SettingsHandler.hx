@@ -1,8 +1,8 @@
-package backend;
+package data;
 
 import flixel.util.FlxSave;
-import backend.settings.VisualizerConfig;
-import backend.settings.AppConfig;
+import util.settings.VisualizerConfig;
+import util.settings.AppConfig;
 
 class SettingsHandler
 {

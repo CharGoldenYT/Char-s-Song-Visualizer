@@ -1,6 +1,6 @@
-package backend;
+package util;
 
-using backend.ArrayTools;
+using util.ArrayTools;
 
 class ArrayTools {
     public static function itemsContain(a:Array<String>, s:String):Bool

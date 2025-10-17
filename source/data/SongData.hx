@@ -1,4 +1,4 @@
-package backend;
+package data;
 
 import openfl.media.Sound;
 import haxe.Json as Parser;

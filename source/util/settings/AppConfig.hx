@@ -1,4 +1,4 @@
-package backend.settings;
+package util.settings;
 
 class AppConfig
 {

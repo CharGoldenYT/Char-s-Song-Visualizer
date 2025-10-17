@@ -1,8 +1,8 @@
-package backend;
+package substates;
 
-import flixel.FlxState;
+import flixel.FlxSubState;
 
-class BaseState extends FlxState
+class BaseSubState extends FlxSubState
 {
     public var controls(get, null):Controls;
     function get_controls():Controls return Controls.instance;

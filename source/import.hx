@@ -1,13 +1,14 @@
 #if !macro
 // Backend shit
-import backend.BaseState;
-import backend.BaseSubState;
-import backend.Constants;
+import states.BaseState;
+import substates.BaseSubState;
+import util.Constants;
 import sys.logger.Logs;
 import sys.logger.Logs.traceNew as tracen;
 import sys.logger.Level;
+import sys.Controls;
 import sys.Paths;
-import backend.Discord;
+import api.Discord;
 
 // Flixel
 import flixel.FlxSprite;
@@ -30,7 +31,7 @@ import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 
 // Using imports
 using StringTools;
-using backend.ArrayTools;
-using backend.ExtendedStringTools;
-using backend.CoolUtil;
+using util.ArrayTools;
+using util.ExtendedStringTools;
+using util.CoolUtil;
 #end

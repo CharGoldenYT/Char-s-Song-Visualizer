@@ -1,6 +1,6 @@
 package sys;
 
-import backend.SongData;
+import data.SongData;
 import openfl.media.Sound;
 
 class Paths
