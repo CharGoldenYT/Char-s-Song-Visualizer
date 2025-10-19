@@ -45,6 +45,8 @@
     <!-- Visualizer Buildtime Settings -->
         <!--<define name="ORIGINAL_TRACESTYLE" />--> <!-- If this is set, doesn't use the custom traces setup in sys.logger.Logs-->
         <define name="ALLOW_CACHING" />
+        <define name="IS_UNIX" if="mac" />
+        <define name="IS_UNIX" if="linux" />
     <!-- Libraries -->
         <haxelib name="flixel" />
         <haxelib name="flixel-ui" />

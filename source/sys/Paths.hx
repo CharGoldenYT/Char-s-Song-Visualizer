@@ -34,7 +34,10 @@ class Paths
 		var pFix:String = pfixfextsongs ? fPrefix : '';
 		var path1 = "./externSongs/" + pFix + key;
 		var path2 = "assets/" + fPrefix + key;
-		if (exists(path1))
+		var path3 = Main.h + '/Music/CSV_externSongs/' + pFix + key; // Mac/Linux music folder.
+		if (exists(path3) && Main.isUnix)
+			return path3;
+		else if (exists(path1))
 			return path1;
 		else
 			return path2;
@@ -74,6 +77,15 @@ class Paths
 		{
 			if (file.endsWith(multiME) || file.endsWith(metadataExtension))
 				list.pushUnique(file);
+		}
+
+		if (Main.isUnix)
+		{
+			for (file in FileSystem.readDirectory(Main.h + '/Music/CSV_externSongs/'))
+			{
+				if (file.endsWith(multiME) || file.endsWith(metadataExtension))
+					list.pushUnique(file);
+			}
 		}
 
 		return list;

@@ -23,6 +23,8 @@ class Main extends Sprite
 	public static var args:Array<String>;
 	public static var appletMode:Bool = false; // Not TRUE applet, but moreso a minimized version for streaming with.
 	public static var verWatermark:Watermark;
+	public static final isUnix:Bool = #if IS_UNIX true #else false #end;
+	public static final h:String = #if IS_UNIX Sys.getEnv("HOME") #else '' #end;
 
 	public static var instance:Main;
 
@@ -31,8 +33,10 @@ class Main extends Sprite
 	{
 		super();
 		args = Sys.args().lowercased();
-		trace(args);
 		initShit();
+		trace(args);
+		if (isUnix)
+			trace("Look at this loser, using a unix based os /j");
 		addChild(curGame = new FlxGame(app.width, app.height, app.initialState, app.fps, app.fps, app.skipSplash, app.startFullscreen));
 	}
 
@@ -65,6 +69,15 @@ class Main extends Sprite
 		if (!FileSystem.exists("externSongs/"))
 		{
 			FileSystem.createDirectory("externSongs/");
+		}
+		if (isUnix)
+		{
+			trace(FileSystem.exists('$h/Music/CSV_externSongs/'));
+			if (!FileSystem.exists('$h/Music/CSV_externSongs/'))
+			{
+				trace("Music Library Path 2 does not exist.");
+				FileSystem.createDirectory('$h/Music/CSV_externSongs/');
+			}
 		}
 		SettingsHandler.loadConfig();
 		instance = this;
