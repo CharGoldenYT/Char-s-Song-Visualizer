@@ -8,6 +8,7 @@ import sys.logger.Logs.traceNew as tracen;
 import sys.logger.Level;
 import sys.Controls;
 import sys.Paths;
+import sys.Paths.mkdir;
 import api.Discord;
 
 // Flixel

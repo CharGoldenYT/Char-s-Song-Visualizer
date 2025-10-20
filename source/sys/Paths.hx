@@ -32,15 +32,45 @@ class Paths
 	public static function getPath(key:String, fPrefix:String = "", pfixfextsongs:Bool = true):String
 	{
 		var pFix:String = pfixfextsongs ? fPrefix : '';
-		var path1 = "./externSongs/" + pFix + key;
-		var path2 = "assets/" + fPrefix + key;
-		var path3 = Main.h + '/Music/CSV_externSongs/' + pFix + key; // Mac/Linux music folder.
-		if (exists(path3) && Main.isUnix)
+		var path = "assets/" + fPrefix + key;
+		var path2 = "./externSongs/" + pFix + key;
+		var path3 = Constants.ufPath + 'externSongs/' + pFix + key; // Mac/Linux music folder.
+		if (exists(path3) && Constants.isUnix)
 			return path3;
-		else if (exists(path1))
-			return path1;
-		else
+		else if (exists(path2))
 			return path2;
+		else
+			return path;
+	}
+
+	public static function getPathArray(key:String, fPrefix:String = "", pfixfextsongs:Bool = true):Array<String>
+	{
+		var pFix:String = pfixfextsongs ? fPrefix : '';
+		var path = "assets/" + fPrefix + key;
+		var path2 = "externSongs/" + pFix + key;
+		var path3 = Constants.ufPath + 'externSongs/' + pFix + key; // Mac/Linux music folder.
+
+		var fPath:Array<String> = [];
+		if (exists(path3) && Constants.isUnix)
+			fPath = path3.split("/");
+		else if (exists(path2))
+			fPath = path2.split("/");
+		else
+			fPath = path.split("/");
+
+		if (fPath[0] == '')
+		{
+			if (fPath[1] == "Users")
+			{
+				fPath.splice(0, 4);
+			}
+			else
+			{
+				fPath.splice(0, 1);
+			}
+		}
+
+		return fPath;
 	}
 
     public static function songMetadata(key:String):String
@@ -79,9 +109,9 @@ class Paths
 				list.pushUnique(file);
 		}
 
-		if (Main.isUnix)
+		if (Constants.isUnix)
 		{
-			for (file in FileSystem.readDirectory(Main.h + '/Music/CSV_externSongs/'))
+			for (file in FileSystem.readDirectory(Constants.ufPath + 'externSongs/'))
 			{
 				if (file.endsWith(multiME) || file.endsWith(metadataExtension))
 					list.pushUnique(file);
@@ -91,21 +121,88 @@ class Paths
 		return list;
 	}
 
-	public static function songPlaylistFolder():String
-		return 'assets/data/playlists/';
+	public static function songPlaylistFolder(key:String):String
+	{
+		var path = "assets/data/playlists/" + key;
+		var path2 = "./playlists/" + key;
+		var path3 = Constants.ufPath + 'playlists/' + key; // Mac/Linux music folder.
+
+		if (exists(path3) && Constants.isUnix)
+			return path3;
+		else if (exists(path2))
+			return path2;
+		else
+			return path;
+	}
+
+	public static function getPlaylistPathArray(key:String):Array<String>
+	{
+		var path = "assets/data/playlists/" + key;
+		var path2 = "./playlists/" + key;
+		var path3 = Constants.ufPath + 'playlists/' + key; // Mac/Linux music folder.
+
+		var fPath:Array<String> = [];
+		if (exists(path3) && Constants.isUnix)
+			fPath = path3.split("/");
+		else if (exists(path2))
+			fPath = path2.split("/");
+		else
+			fPath = path.split("/");
+
+		if (fPath[0] == '')
+		{
+			if (fPath[1] == "Users")
+			{
+				fPath.splice(0, 4);
+			}
+			else
+			{
+				fPath.splice(0, 1);
+			}
+		}
+
+		return fPath;
+	}	
 
 	public static function playlistFile(key:String):String
     {
-		if (!FileSystem.exists(songPlaylistFolder() + '$key.$playlistExt'))
+		if (!FileSystem.exists(songPlaylistFolder('$key.$playlistExt')))
 		{
-			tracen('Shit `${songPlaylistFolder() + '$key.$playlistExt'}` does not exist!', ERROR);
+			tracen('Shit `${songPlaylistFolder('$key.$playlistExt')}` does not exist!', ERROR);
 			return null;
 		}
-		return songPlaylistFolder() + '$key.$playlistExt';
+		return songPlaylistFolder('$key.$playlistExt');
+	}
+
+	public static inline function mkdir(fPath:String)
+	{
+		if (!FileSystem.exists(fPath))
+			FileSystem.createDirectory(fPath);
 	}
 
 	public static function listPlaylistFiles():Array<String>
-		return FileSystem.readDirectory(songPlaylistFolder());
+	{
+		var a:Array<String> = [];
+		for (file in FileSystem.readDirectory("assets/data/playlists"))
+		{
+			if (file.endsWith(playlistExt))
+				a.pushUnique(file);
+		}
+
+		for (file in FileSystem.readDirectory("playlists/"))
+		{
+			if (file.endsWith(playlistExt))
+				a.pushUnique(file);
+		}
+
+		for (file in FileSystem.readDirectory(Constants.ufPath + "playlists"))
+		{
+			if (file.endsWith(playlistExt))
+				a.pushUnique(file);
+		}
+
+		return a;
+	}
 
     public static function image(key:String):String
     {

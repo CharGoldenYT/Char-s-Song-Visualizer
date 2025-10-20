@@ -211,6 +211,18 @@ class SongSelector extends BaseState
 		changeSelection();
 	}
 
+	static function formatPath(pArray:Array<String>, file:String):String
+	{
+		switch (pArray[0])
+		{
+			case "assets":
+				return pArray[0] + ' : ' + pArray[2] + ' : ' + file;
+			case "externSongs":
+				return pArray[0] + ' : ' + file;
+			default:
+				return pArray[0] + ' : ' + pArray[1] + ' : ' + file;
+		}
+	}
 	public static function refreshSongList()
 	{
 		SongData.resetCache();
@@ -218,7 +230,7 @@ class SongSelector extends BaseState
 		for (file in Paths.listMetadataFiles())
 		{
 			var reprFile = Paths.getPath(file, "data/songMetadata/", false);
-			trace(reprFile);
+			trace(formatPath(Paths.getPathArray(file, "data/songMetadata/", false), file));
 			if (file.endsWith(Paths.metadataExtension))
 			{
 				SongData.loadSongMetadataFromFile(reprFile);
@@ -234,11 +246,10 @@ class SongSelector extends BaseState
 		}
 		for (file in Paths.listPlaylistFiles())
 		{
-			var reprFile = Paths.songPlaylistFolder() + file;
+			var reprFile = Paths.songPlaylistFolder(file);
+			trace(formatPath(Paths.getPlaylistPathArray(file), file));
 			if (file.endsWith(Paths.playlistExt))
 				SongData.loadPlaylist(reprFile);
-			else
-				tracen('File `$reprFile` is not a valid playlist filetype, please use ${Paths.playlistExt}!', ERROR);
 		}
 	}
 }

@@ -33,7 +33,11 @@ class Repr_SemVer // move over thx.semver /j
 
 class Constants
 {
+	public static final isUnix:Bool = #if IS_UNIX true #else false #end;
+	public static final h:String = #if IS_UNIX Sys.getEnv("HOME") #else '' #end;
     public static final saveFolder:String = "Char_s-Song-Visualizer";
 	public static final ver:Repr_SemVer = new Repr_SemVer(0, 0, 1);
 	public static final settingFileVersion:Repr_SemVer = new Repr_SemVer(1, 0, 0);
+	public static final ufPath:String = h + '/Music/CSV/';
+	public static final inDebug:Bool = #if debug true #else false #end;
 }
