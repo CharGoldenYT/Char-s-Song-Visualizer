@@ -67,8 +67,9 @@ class Main extends Sprite
 		var h = Constants.h;
 		mkdir("externSongs/");
 		mkdir("playlists/");
-		mkdir('$h/CSV/externSongs');
-		mkdir('$h/CSV/playlists');
+		mkdir(Constants.ufPath);
+		mkdir('$h/Music/CSV/externSongs');
+		mkdir('$h/Music/CSV/playlists');
 		SettingsHandler.loadConfig();
 		instance = this;
 	}
