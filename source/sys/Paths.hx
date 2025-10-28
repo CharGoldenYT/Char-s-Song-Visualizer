@@ -34,8 +34,8 @@ class Paths
 		var pFix:String = pfixfextsongs ? fPrefix : '';
 		var path = "assets/" + fPrefix + key;
 		var path2 = "./externSongs/" + pFix + key;
-		var path3 = Constants.ufPath + 'externSongs/' + pFix + key; // Mac/Linux music folder.
-		if (exists(path3) && Constants.isUnix)
+		var path3 = Constants.ufPath + 'externSongs/' + pFix + key; // Music folder.
+		if (exists(path3))
 			return path3;
 		else if (exists(path2))
 			return path2;
@@ -48,10 +48,10 @@ class Paths
 		var pFix:String = pfixfextsongs ? fPrefix : '';
 		var path = "assets/" + fPrefix + key;
 		var path2 = "externSongs/" + pFix + key;
-		var path3 = Constants.ufPath + 'externSongs/' + pFix + key; // Mac/Linux music folder.
+		var path3 = Constants.ufPath + 'externSongs/' + pFix + key; // Music Folder
 
 		var fPath:Array<String> = [];
-		if (exists(path3) && Constants.isUnix)
+		if (exists(path3))
 			fPath = path3.split("/");
 		else if (exists(path2))
 			fPath = path2.split("/");
@@ -121,6 +121,9 @@ class Paths
 		return list;
 	}
 
+	/*
+	 * I'M GOING TO
+	**/
 	public static function songPlaylistFolder(key:String):String
 	{
 		var path = "assets/data/playlists/" + key;
