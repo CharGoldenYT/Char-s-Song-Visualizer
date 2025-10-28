@@ -64,12 +64,11 @@ class Main extends Sprite
 		Logs.init();
 		#end
 		new Controls();
-		var h = Constants.h;
 		mkdir("externSongs/");
 		mkdir("playlists/");
 		mkdir(Constants.ufPath);
-		mkdir('$h/Music/CSV/externSongs');
-		mkdir('$h/Music/CSV/playlists');
+		mkdir('${Constants.ufPath}externSongs');
+		mkdir('${Constants.ufPath}playlists');
 		SettingsHandler.loadConfig();
 		instance = this;
 	}
