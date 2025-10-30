@@ -15,7 +15,7 @@ class Watermark extends TextField
 
 		selectable = false;
 		mouseEnabled = false;
-		defaultTextFormat = new TextFormat(Paths.font('funkin.ttf'), size, color);
+		defaultTextFormat = new TextFormat(Paths.font('UbuntuMR.ttf'), size, color);
 		autoSize = CENTER;
 		multiline = true;
 		text = s;

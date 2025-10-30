@@ -128,7 +128,7 @@ class SongPlayerSubstate extends BaseSubState
 			};
 
 		var songText:FlxText = new FlxText(0, 0, 0, "", 20);
-		songText.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
+		songText.setFormat(Paths.font("UbuntuMR.ttf"), 30, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
 		songText.y = playerBG.y + ((playerBG.height * 0.5) - songText.height) - 30;
 		add(songText);
 		song = SongSelector.instance.songList[SongSelector.instance.curSelected];
@@ -137,7 +137,7 @@ class SongPlayerSubstate extends BaseSubState
 		DiscordClient.changePresence('${song.name} | ${song.album} | ${formatArtists(song.artists)} | ${FlxStringUtil.formatTime(curSong.length / 1000)} ${isLooped ? " - Looping" : ""}');
 
 		timeTxt = new FlxText(35, 0, 0, "0:00 / " + FlxStringUtil.formatTime(curSong.length / 1000), 20);
-		timeTxt.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
+		timeTxt.setFormat(Paths.font("Technology.ttf"), 30, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
 		timeTxt.y = songText.y + 100;
 
 		timeBar = new FlxBar(timeTxt.x - 25, timeTxt.y + 50, LEFT_TO_RIGHT, bw - 20, 10, this, 'songPercent', 0, 1);

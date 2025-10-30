@@ -65,8 +65,8 @@ class SongSelector extends BaseState
 		bg.screenCenter();
 
 		catText = new FlxText(0, 10, FlxG.width, "(Q) < SONGS > (E)", 40);
-		catText.setFormat(null, 40, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
-		catText.borderSize = 5;
+		catText.setFormat(Paths.font("UbuntuMR.ttf"), 40, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
+		catText.borderSize = 3;
 		add(catText);
 
 		grpSongs = new FlxTypedGroup<FlxText>();
@@ -79,7 +79,7 @@ class SongSelector extends BaseState
 			pos++;
 			var s:String = '${song.name}\n${song.album}';
 			var text:FlxText = new FlxText(0, 60 * pos, 0, s, 20);
-			text.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
+			text.setFormat(Paths.font("UbuntuMB.ttf"), 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
 			text.ID = pos;
 			grpSongs.add(text);
 		}
@@ -203,7 +203,7 @@ class SongSelector extends BaseState
 				s = '${fList[i].name}\n${fList[i].album}';
 			}
 			var text:FlxText = new FlxText(0, 60 * i, 0, s, 20);
-			text.setFormat(null, 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
+			text.setFormat(Paths.font("UbuntuMB.ttf"), 20, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
 			text.ID = i;
 			grpSongs.add(text);
 		}
