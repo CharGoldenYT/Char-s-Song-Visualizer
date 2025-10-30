@@ -154,16 +154,17 @@ class SongSelector extends BaseState
 
 	function goToSongPlayer(?loop:Bool = false, ?shuffle:Bool = false)
 	{
-		if (tabs[curTab] == "PLAYLISTS")
+		trace(curTab);
+		if (curTab == 1)
 		{
+			SongData.loadedPlaylist = playlist_list[curSelected];
 			SongPlayerSubstate.curPlaylist = {
 				data: playlist_list[curSelected],
 				loop: loop,
 				shuffle: shuffle
 			};
 		}
-		var curMetadata = songList[curSelected];
-		SongData.loadedData = curMetadata;
+		SongData.loadedData = curTab == 1 ? playlist_list[curSelected].mmdf.data[0] : songList[curSelected];
 		bg.alpha = 0;
 		catText.alpha = 0;
 		openSubState(new SongPlayerSubstate(loop));
@@ -171,7 +172,6 @@ class SongSelector extends BaseState
 
 	function changeTabs(change:Int = 0)
 	{
-		// return; // function broken.
 		FlxG.sound.play(Paths.sound("scrollMenu"));
 
 		curTab += change;
@@ -249,7 +249,7 @@ class SongSelector extends BaseState
 			var reprFile = Paths.songPlaylistFolder(file);
 			trace(formatPath(Paths.getPlaylistPathArray(file), file));
 			if (file.endsWith(Paths.playlistExt))
-				SongData.loadPlaylist(reprFile);
+				trace(SongData.loadPlaylist(reprFile));
 		}
 	}
 }

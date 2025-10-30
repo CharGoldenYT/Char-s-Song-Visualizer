@@ -45,6 +45,7 @@ class SongData
     public static var dataArray:Array<Repr_SongData> = [];
 	public static var songCache:Map<String, Sound> = [];
 	public static var listArray:Array<Repr_Playlist> = [];
+	public static var songArray:Array<FlxSound> = [];
 
     public static function loadSongMetadataFromFile(path:String):Repr_SongData
     {
@@ -81,6 +82,51 @@ class SongData
 		listArray.pushUnique(list);
 
 		return list;
+	}
+
+	public static function loadSongsFromList(?loop:Bool = false):FlxSound
+	{
+		songArray = [];
+
+		if (loadedPlaylist.listName == "No Playlist")
+		{
+			songArray = [loadSong(loop)];
+		}
+		else
+		{
+			for (song in loadedPlaylist.mmdf.data)
+			{
+				songArray.push(new FlxSound().loadEmbedded(Paths.song(song.path)));
+			}
+		}
+
+		return songArray[0];
+	}
+
+	public static var songCount:Int = 0;
+
+	public static function nextSongInList(loop:Bool = false, shuffle:Bool = false):FlxSound
+	{
+		try
+		{
+			if (songArray.length < 2)
+				return null;
+			if (shuffle)
+			{
+				return songArray[FlxG.random.int(0, songArray.length - 1)];
+			}
+			else
+			{
+				songCount++;
+				if (songCount > songArray.length - 1)
+					return null;
+				return songArray[songCount];
+			}
+		}
+		catch (e:Dynamic)
+		{
+			return null;
+		}
 	}
 
     public static function reset_loadedData()

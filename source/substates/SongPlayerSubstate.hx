@@ -36,48 +36,6 @@ class SongPlayerSubstate extends BaseSubState
 		return !(curSong.playing ?? true);
 	}
 
-	function nextSong():Repr_SongData
-	{
-		if (curPlaylist == null)
-		{
-			if (!isLooped)
-				close(); // fun fact this means it was a singular song that was loaded.
-			return null;
-		}
-		var pl_data:Array<Repr_SongData> = curPlaylist.data.mmdf.data;
-		var song:Repr_SongData;
-
-		if (curPlaylist.shuffle)
-		{
-			if (!curPlaylist.loop)
-				curPlaylist.data.mmdf.data.splice(pl_data.indexOf(SongData.loadedData), 1);
-			var int = FlxG.random.int(0, pl_data.length - 1);
-			song = pl_data[int];
-			if (song.path == SongData.loadedData.path)
-			{
-				if (int == pl_data.length)
-					song = pl_data[int - 1];
-				else
-					song = pl_data[int + 1];
-			}
-		}
-		else
-		{
-			songIndex++;
-			if (songIndex > pl_data.length - 1)
-			{
-				if (!curPlaylist.loop)
-					close();
-				else
-					songIndex = 0;
-			}
-
-			song = pl_data[songIndex];
-		}
-
-		return song;
-	}
-
     public function new(?loop:Bool = false)
     {
         super();
@@ -96,7 +54,7 @@ class SongPlayerSubstate extends BaseSubState
 		this.cameras = [SongSelector.instance.camMusic];
 
 		var loopIt:Bool = (isLooped && (curPlaylist == null));
-		curSong = SongData.loadSong(loopIt);
+		curSong = SongData.loadSongsFromList(loopIt);
 		FlxG.sound.list.add(curSong);
 
 		var bw:Int = 300;
@@ -111,21 +69,7 @@ class SongPlayerSubstate extends BaseSubState
 		playerBG.y = FlxG.height - playerBG.height;
 
 		curSong.play();
-		curSong.onComplete = () ->
-			{
-				var data = nextSong();
-			if (curPlaylist != null)
-			{
-				if (data != null)
-				{
-					curSong.destroy();
-					SongData.loadedData = data;
-					curSong = SongData.loadSong();
-					curSong.play();
-					FlxG.sound.list.add(curSong);
-				}
-			}
-			};
+		curSong.onComplete = songCompleted;
 
 		var songText:FlxText = new FlxText(0, 0, 0, "", 20);
 		songText.setFormat(Paths.font("UbuntuMR.ttf"), 30, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
@@ -159,6 +103,16 @@ class SongPlayerSubstate extends BaseSubState
 		loopSymbol.color = isLooped ? 0xFFFFFFFF : 0xFF888888;
 	}
 
+	function songCompleted()
+	{
+		var nextSong:Null<FlxSound> = SongData.nextSongInList(isLooped, curPlaylist.shuffle);
+		if (nextSong == null)
+			return close();
+		curSong = nextSong;
+		FlxG.sound.list.add(curSong);
+		curSong.play();
+	}
+
 	function formatArtists(a:Array<String>):String
 	{
 		var s:String = "";
@@ -177,7 +131,8 @@ class SongPlayerSubstate extends BaseSubState
 	}
 
 	public override function close() {
-		curSong.stop();
+		if (curSong != null && !curSong.playing)
+			curSong.stop();
 		SongSelector.instance.bg.alpha = 1;
 		SongSelector.instance.catText.alpha = 1;
 		DiscordClient.changePresence();
