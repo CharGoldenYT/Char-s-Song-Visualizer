@@ -4,7 +4,6 @@ import flixel.util.FlxStringUtil;
 import states.SongSelector;
 import data.SongData;
 import flixel.math.FlxMath;
-
 import flixel.ui.FlxBar;
 
 typedef Playlist =
@@ -18,16 +17,19 @@ class SongPlayerSubstate extends BaseSubState
 {
 	var playerBG:FlxSprite;
 	var timeTxt:FlxText;
+
 	static var curSong:FlxSound;
+
 	var song:Repr_SongData;
 	var songText:FlxText;
-    var isLooped:Bool = false;
+	var isLooped:Bool = false;
 	var isPaused(get, null):Bool;
 	var songPercent:Float;
+
 	public static var curPlaylist:Playlist = null;
 
 	var songIndex:Int = 0;
-	
+
 	var timeBar:FlxBar;
 	var timeControl:FlxSprite;
 
@@ -78,13 +80,14 @@ class SongPlayerSubstate extends BaseSubState
 		return song;
 	}
 
-    public function new(?loop:Bool = false)
-    {
-        super();
-        isLooped = loop;
-    }
+	public function new(?loop:Bool = false)
+	{
+		super();
+		isLooped = loop;
+	}
 
-	public override function create() {
+	public override function create()
+	{
 		super.create();
 		if (!Main.appletMode)
 		{
@@ -104,7 +107,8 @@ class SongPlayerSubstate extends BaseSubState
 
 		if (!Main.appletMode)
 		{
-			bw = 600; bh = 300;
+			bw = 600;
+			bh = 300;
 		}
 		playerBG = new FlxSprite().makeGraphic(bw, bh, 0xFFCC66DD);
 		add(playerBG);
@@ -112,8 +116,8 @@ class SongPlayerSubstate extends BaseSubState
 
 		curSong.play();
 		curSong.onComplete = () ->
-			{
-				var data = nextSong();
+		{
+			var data = nextSong();
 			if (curPlaylist != null)
 			{
 				if (data != null)
@@ -125,7 +129,7 @@ class SongPlayerSubstate extends BaseSubState
 					FlxG.sound.list.add(curSong);
 				}
 			}
-			};
+		};
 
 		var songText:FlxText = new FlxText(0, 0, 0, "", 20);
 		songText.setFormat(Paths.font("UbuntuMR.ttf"), 30, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
@@ -146,8 +150,8 @@ class SongPlayerSubstate extends BaseSubState
 		timeBar.numDivisions = 800;
 		add(timeBar);
 
-		timeControl = new FlxSprite().makeGraphic(10, Std.int(timeBar.height)+10, 0xFFFFFFFF);
-		timeControl.y = timeBar.y-(timeBar.height/2);
+		timeControl = new FlxSprite().makeGraphic(10, Std.int(timeBar.height) + 10, 0xFFFFFFFF);
+		timeControl.y = timeBar.y - (timeBar.height / 2);
 		add(timeControl);
 
 		add(timeTxt);
@@ -169,14 +173,15 @@ class SongPlayerSubstate extends BaseSubState
 
 		var split = s.split("");
 		s = "";
-		for (i in 0...split.length-2)
+		for (i in 0...split.length - 2)
 		{
 			s += split[i];
 		}
 		return s;
 	}
 
-	public override function close() {
+	public override function close()
+	{
 		curSong.stop();
 		SongSelector.instance.bg.alpha = 1;
 		SongSelector.instance.catText.alpha = 1;
@@ -185,31 +190,34 @@ class SongPlayerSubstate extends BaseSubState
 		super.close();
 	}
 
-    public function re_init()
-    {
-        curSong.stop();
+	public function re_init()
+	{
+		curSong.stop();
 		close();
 		SongSelector.instance.openSubState(new SongPlayerSubstate(isLooped));
-    }
+	}
 
-
-	public override function update(elapsed:Float) {
+	public override function update(elapsed:Float)
+	{
 		super.update(elapsed);
 
 		timeTxt.text = '${FlxStringUtil.formatTime(curSong.time / 1000)} : ${FlxStringUtil.formatTime(curSong.length / 1000)}';
 		songPercent = curSong.time / curSong.length;
 
-		if (FlxG.mouse.overlaps(timeBar)){
-			if (FlxG.mouse.justPressed){
-				skipTime(Std.int(FlxMath.remapToRange(FlxG.mouse.screenX, 0, timeBar.width, 0, curSong.length/1000) - curSong.time/1000));
+		if (FlxG.mouse.overlaps(timeBar))
+		{
+			if (FlxG.mouse.justPressed)
+			{
+				skipTime(Std.int(FlxMath.remapToRange(FlxG.mouse.screenX, 0, timeBar.width, 0, curSong.length / 1000) - curSong.time / 1000));
 			}
 			timeControl.scale.y = timeControl.scale.y + (1.5 - timeControl.scale.y) / 2;
-		}else{
+		}
+		else
+		{
 			timeControl.scale.y = timeControl.scale.y + (1 - timeControl.scale.y) / 2;
 		}
 
-		timeControl.x = timeBar.x
-			+ (timeBar.width * (FlxMath.remapToRange(timeBar.percent, 0, 100, 0, 100 *0.01)));
+		timeControl.x = timeBar.x + (timeBar.width * (FlxMath.remapToRange(timeBar.percent, 0, 100, 0, 100 * 0.01)));
 
 		if (controls.LEFT_P)
 		{
@@ -250,6 +258,7 @@ class SongPlayerSubstate extends BaseSubState
 			refrTime = curSong.time;
 		curSong.time = refrTime;
 
-		if (!wasPaused) curSong.play();
+		if (!wasPaused)
+			curSong.play();
 	}
 }
