@@ -10,6 +10,7 @@ import sys.Controls;
 import sys.Paths;
 import sys.Paths.mkdir;
 import api.Discord;
+import states.SongSelectionState as SongSelector;
 
 // Flixel
 import flixel.FlxSprite;
@@ -29,6 +30,7 @@ import flixel.group.FlxGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
+import flixel.util.FlxColor;
 
 // Using imports
 using StringTools;

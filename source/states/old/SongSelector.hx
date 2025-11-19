@@ -41,24 +41,12 @@ class SongSelector extends BaseState
 
 		refreshSongList();
 
-		camBG = new FlxCamera();
-		camMenu = new FlxCamera();
-		camMusic = new FlxCamera();
 		camFollow = new FlxObject();
 		camFollow.screenCenter(X);
-		camViz = new FlxCamera();
-
-		camMenu.bgColor.alpha = 0;
-		camMusic.bgColor.alpha = 0;
-		camViz.bgColor.alpha = 0;
-		camMenu.scroll.y = camFollow.y;
-		camMenu.scroll.x = camFollow.x;
-		camMenu.follow(camFollow, LOCKON, 0.06);
-
-		FlxG.cameras.add(camBG);
-		FlxG.cameras.add(camMenu, false);
-		FlxG.cameras.add(camMusic, false);
-		FlxG.cameras.add(camViz, false);
+		camBG = newCam(0, 0, 0, 0, 0, 0xFF000000, 1, true);
+		camMenu = newCam(0, 0, 0, 0, 0, 0xFF000000, 0, false, camFollow);
+		camMusic = newCam(0, 0, 0, 0, 0, 0xFF000000, 0.5);
+		camViz = newCam(0, 0, 0, 0, 0, 0xFF000000, 0);
 
 		bg = new FlxSprite().loadGraphic(Paths.image("SongSelectorBG"));
 		add(bg);
@@ -99,6 +87,7 @@ class SongSelector extends BaseState
 		if (curSelected < 0)
 			curSelected = curList.length - 1;
 
+		// Thanks @VideoBotYT for fixing this section.
 		grpSongs.forEach(function(member:FlxText){
 			if (member.ID == curSelected){
 				member.alpha = 1;
@@ -107,20 +96,6 @@ class SongSelector extends BaseState
 				member.alpha = 0.5;
 			}
 		});
-
-		// for (i in 0...songList.length)
-		// {
-		// 	var member:FlxText = grpSongs.members[i];
-		// 	if (i == curSelected)
-		// 	{
-		// 		member.alpha = 1;
-		// 		camFollow.y = member.y;
-		// 	}
-		// 	else
-		// 	{
-		// 		member.alpha = 0.5;
-		// 	}
-		// }
 	}
 
 	public override function update(elapsed:Float) {

@@ -1,8 +1,7 @@
 package states;
 
 import sys.Watermark;
-import data.SongData;
-import data.SongData.Repr_SongData;
+import data.song.SongHandler;
 import openfl.Lib;
 
 class InitState extends BaseState
@@ -20,20 +19,15 @@ class InitState extends BaseState
         #if !ALLOW_CACHING
         trace("No song metadata to load!");
 		#else
-		refreshSongList();
 
-		for (song in SongData.dataArray)
-		{
-			var s:FlxSound = new FlxSound().loadEmbedded(Paths.song(song.path));
-		}
-		trace(SongData.songCache);
+		SongHandler.init();
         #end
         
         trace("Finished loading song metadata");
         text.text = "Finished Loading, Going to menu in 5 seconds";
 
         timer = new FlxTimer().start(5, (_)->{
-            FlxG.switchState(new SongSelector());
+			FlxG.switchState(new SongSelectionState());
         });
 
         Lib.application.window.width = Main.app.width;
@@ -45,9 +39,6 @@ class InitState extends BaseState
 		Main.verWatermark.alpha = 1;
 		Main.instance.addChild(Main.verWatermark);
     }
-
-	function refreshSongList()
-		SongSelector.refreshSongList();
 
     public override function update(elapsed:Float) {
         super.update(elapsed);

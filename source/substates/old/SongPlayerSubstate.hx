@@ -1,7 +1,6 @@
 package substates;
 
 import flixel.util.FlxStringUtil;
-import states.SongSelector;
 import data.SongData;
 import flixel.math.FlxMath;
 import flixel.ui.FlxBar;

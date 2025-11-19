@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="player_controls.png">
+	<!-- Created with Adobe Animate version 24.0.12.2 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Last instance 10000" x="0" y="0" width="65" height="58"/>
+	<SubTexture name="Loop instance 10000" x="70" y="0" width="72" height="63"/>
+	<SubTexture name="Next instance 10000" x="147" y="0" width="66" height="58"/>
+	<SubTexture name="Pause instance 10000" x="218" y="0" width="38" height="58"/>
+	<SubTexture name="Play instance 10000" x="0" y="68" width="50" height="58"/>
+	<SubTexture name="SkipBack instance 10000" x="55" y="68" width="50" height="58"/>
+	<SubTexture name="SkipForward instance 10000" x="110" y="68" width="50" height="58"/>
+	<SubTexture name="SongList instance 10000" x="165" y="68" width="66" height="84"/>
+</TextureAtlas>

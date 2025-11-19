@@ -6,6 +6,7 @@ import sys.FileSystem;
 import sys.io.File;
 
 // Used to load song data from a file.
+@:deprecated("This typedef is being replaced soon!")
 typedef Repr_SongData = {
     var name:String;
     var artists:Array<String>;
@@ -15,6 +16,7 @@ typedef Repr_SongData = {
 	@:optional var extraMetadata:Array<Dynamic>; // For extra behaviour that is modded in
 }
 
+@:deprecated("This typedef is being replaced soon!")
 typedef Repr_Playlist =
 {
 	var mmdf:MultiSongData;
@@ -23,10 +25,12 @@ typedef Repr_Playlist =
 	@:optional var extraMetadata:Array<Dynamic>;
 }
 
+@:deprecated("This typedef is being replaced soon!")
 typedef MultiSongData = {
     var data:Array<Repr_SongData>;
 }
 
+@:deprecated("This class is being replaced soon!")
 class SongData
 {
     public static var loadedData:Repr_SongData = {

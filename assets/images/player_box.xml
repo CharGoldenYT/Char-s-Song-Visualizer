@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="player_box.png">
+	<!-- Created with Adobe Animate version 24.0.12.2 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="BoxTLC instance 10000" x="0" y="0" width="13" height="12"/>
+	<SubTexture name="BoxTLC instance 20000" x="14" y="0" width="13" height="12"/>
+	<SubTexture name="BoxTLC instance 30000" x="28" y="0" width="12" height="13"/>
+	<SubTexture name="BoxTLC instance 40000" x="41" y="0" width="13" height="12"/>
+	<SubTexture name="PlayerEnd instance 10000" x="0" y="14" width="10" height="9"/>
+	<SubTexture name="PlayerMiddle instance 10000" x="11" y="14" width="10" height="9"/>
+	<SubTexture name="PlayerMiddle_Played instance 10000" x="22" y="14" width="10" height="9"/>
+	<SubTexture name="PlayerStart instance 10000" x="33" y="14" width="10" height="9"/>
+	<SubTexture name="bocmiddle instance 10000" x="44" y="14" width="13" height="13"/>
+	<SubTexture name="playerHead instance 10000" x="0" y="28" width="13" height="13"/>
+</TextureAtlas>
