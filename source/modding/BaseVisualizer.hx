@@ -29,7 +29,7 @@ class BaseVisualizer extends BaseScript
         timeTxt.y = player.y - (timeTxt.height + 50);
         add(timeTxt);
 
-        timeBar = new FlxBar(0, 0, LEFT_TO_RIGHT, FlxG.width - 200, 20, this, "songPercent");
+        timeBar = new FlxBar(0, 0, LEFT_TO_RIGHT, FlxG.width - 200, 20, this, "songPercent", 0, 1);
 		timeBar.scrollFactor.set();
 		timeBar.createFilledBar(0xFFFFFFFF, 0xFFFF8800);
 		timeBar.numDivisions = 800;

@@ -90,7 +90,7 @@ class SongHandler {
     public static var songTimeText(get, null):String;
     static function get_curTime():Float return curPlayingSong.time;
     static function get_songLength():Float return curPlayingSong.length;
-    static function get_songPercent():Float return (curPlayingSong.time / curPlayingSong.length);
+    static function get_songPercent():Float return curPlayingSong.time / curPlayingSong.length;
     static function get_songTimeText():String return '${FlxStringUtil.formatTime(curTime / 1000)} : ${FlxStringUtil.formatTime(songLength / 1000)}';
     public static function update(elapsed:Float)
     {
