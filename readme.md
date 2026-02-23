@@ -1,6 +1,6 @@
 # Char's Song Visualizer
 
-## A .ogg player that let's you add custom visuals behind a track (NOT YET IMPLEMENTED)
+## An ogg player that let's you add custom visuals behind a track (NOT YET IMPLEMENTED)
 
 # How to add custom assets
 
